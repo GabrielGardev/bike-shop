@@ -14,7 +14,7 @@ public class Bicycle extends BaseEntity{
     private String color;
     private BigDecimal price;
     private Category category;
-    private Set<BikeSize> bikeSize;
+    private Set<BicycleSize> bicycleSize;
     private Set<Image> images;
     private Set<Component> components;
 
@@ -73,7 +73,7 @@ public class Bicycle extends BaseEntity{
         this.category = category;
     }
 
-    @ManyToMany(targetEntity = BikeSize.class)
+    @ManyToMany(targetEntity = BicycleSize.class)
     @JoinTable(
             name = "bikes_sizes",
             joinColumns = @JoinColumn(
@@ -85,12 +85,12 @@ public class Bicycle extends BaseEntity{
                     referencedColumnName = "id"
             )
     )
-    public Set<BikeSize> getBikeSize() {
-        return bikeSize;
+    public Set<BicycleSize> getBicycleSize() {
+        return bicycleSize;
     }
 
-    public void setBikeSize(Set<BikeSize> bikeSize) {
-        this.bikeSize = bikeSize;
+    public void setBicycleSize(Set<BicycleSize> bicycleSize) {
+        this.bicycleSize = bicycleSize;
     }
 
     @OneToMany(mappedBy = "bicycle")

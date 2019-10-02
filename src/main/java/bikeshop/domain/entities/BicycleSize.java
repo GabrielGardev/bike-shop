@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "sizes")
-public class BikeSize extends BaseEntity{
+public class BicycleSize extends BaseEntity{
 
     private String name;
 
