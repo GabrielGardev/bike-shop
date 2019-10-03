@@ -121,4 +121,5 @@ public class Bicycle extends BaseEntity{
     public void setComponents(Set<Component> components) {
         this.components = components;
     }
+
 }

@@ -10,7 +10,7 @@ public class HomeController extends BaseController {
 
     @GetMapping("/")
     @PreAuthorize("isAnonymous()")
-    public ModelAndView index(){
-        return view("index");
+    public ModelAndView index(ModelAndView modelAndView){
+        return view("index", modelAndView);
     }
 }
