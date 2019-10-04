@@ -39,11 +39,12 @@ public class UserServiceImpl implements UserService {
 
         User user = modelMapper.map(userServiceModel, User.class);
         user.setPassword(bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
+        userRepository.saveAndFlush(user);
 
         return modelMapper.map(user, UserServiceModel.class);
     }
 
-    //danger method check if service model is without authorities
+
     private void putProperRoles(UserServiceModel userServiceModel) {
         if (userRepository.count() == 0){
             userServiceModel.setAuthorities(roleService.findAllRoles());

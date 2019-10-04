@@ -9,13 +9,13 @@
             </div>
 
             <div class="navbar-toggler-right">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#guestNav" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
 
 
-            <div class="collapse navbar-collapse flex-column" id="navbar">
+            <div class="collapse navbar-collapse flex-column" id="guestNav">
 
                 <ul class="navbar-nav w-100 px-3 justify-content-end">
                     <li class="nav-item active">
@@ -36,10 +36,16 @@
 
 <!--    LOG IN USER-->
     <th:block sec:authorize="isAuthenticated()">
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+
+            <div class="navbar-header ml-3">
+                <a class="navbar-brand font-weight-bold mt-1" th:href="@{/}">
+                    <img class="mb-1" th:src="@{/images/bike-logo.png}" th:width="35" th:height="32" alt="header logo"/> Bikecom
+                </a>
+            </div>
 
             <div class="navbar-toggler-right">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userNav" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </div>
@@ -47,25 +53,62 @@
 
 
 
-            <div class="collapse navbar-collapse flex-column" id="navbar">
+            <div class="collapse navbar-collapse flex-column" id="userNav">
 
-                <ul class="navbar-nav w-100 px-3">
+<!--                First line-->
+                <ul class="navbar-nav w-100 px-3 justify-content-end">
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/users/profile}">
+                            <img class="mb-1" th:src="@{/images/user-logo.png}" th:width="18" th:height="18" alt="register logo"/> Profile</a>
+                    </li>
 
-                    <li class="nav-item active justify-content-start">
-                        <a class="nav-link" th:href="@{/}">Bikecom <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item active justify-content-end">
-                        <a class="nav-link" th:href="@{/users/login}">Login</a>
-                    </li>
-                    <li class="nav-item active justify-content-end">
-                        <a class="nav-link" th:href="@{/users/register}">Register</a>
+                    <th:block sec:authorize="hasRole('ROLE_MODERATOR')">
+                        <li class="nav-item active">
+                            <div class="dropdown show">
+                                <a class="nav-link active dropdown-toggle" href="#" role="button" id="moderatorDropdown"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Moderator
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="moderatorDropdown">
+                                    <a class="dropdown-item" th:href="@{/categories/add}">Add Category</a>
+                                    <a class="dropdown-item" th:href="@{/products/add}">Add Product</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" th:href="@{/categories/all}">All Categories</a>
+                                    <a class="dropdown-item" th:href="@{/products/all}">All Products</a>
+                                </div>
+                            </div>
+                        </li>
+                    </th:block>
+
+                    <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                        <li class="nav-item active">
+                            <div class="dropdown">
+                                <a class="nav-link active dropdown-toggle" href="#" role="button" id="adminDropdown"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="adminDropdown">
+                                    <a class="dropdown-item" th:href="@{/users/all}">All Users</a>
+                                    <a class="dropdown-item" th:href="@{/orders/all}">All Orders</a>
+                                </div>
+                            </div>
+                        </li>
+                    </th:block>
+
+                    <li class="nav-item active">
+                        <a class="nav-link" th:href="@{/logout?login}">Logout</a>
                     </li>
                 </ul>
+<!--                end of first line-->
 
+
+<!--                Second line-->
                 <ul class="navbar-nav justify-content-center w-100 bg-secondary px-3">
+
                     <li class="nav-item active">
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Dropdown link
@@ -97,7 +140,7 @@
                         </div>
                     </li>
                 </ul>
-
+<!--                end of second line-->
 
             </div>
 
