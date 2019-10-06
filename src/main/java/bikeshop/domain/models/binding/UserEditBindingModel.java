@@ -1,15 +1,14 @@
-package bikeshop.domain.models.service;
+package bikeshop.domain.models.binding;
 
-import java.util.Set;
-
-public class UserServiceModel extends BaseServiceModel {
+public class UserEditBindingModel {
 
     private String username;
+    private String oldPassword;
     private String password;
+    private String confirmPassword;
     private String firstName;
     private String lastName;
     private String email;
-    private Set<RoleServiceModel> authorities;
 
     public String getUsername() {
         return username;
@@ -19,12 +18,28 @@ public class UserServiceModel extends BaseServiceModel {
         this.username = username;
     }
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getFirstName() {
@@ -49,13 +64,5 @@ public class UserServiceModel extends BaseServiceModel {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Set<RoleServiceModel> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(Set<RoleServiceModel> authorities) {
-        this.authorities = authorities;
     }
 }

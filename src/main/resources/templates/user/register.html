@@ -9,7 +9,7 @@
 <header>
     <th:block th:include="~{fragments/navbar}"></th:block>
 </header>
-<main class="mt-3">
+<main class="m-3">
     <h1 class="text-center text-dark">Register</h1>
     <hr class="hr-2 bg-dark w-25">
     <form class="form w-25 mx-auto" th:action="@{/users/register}" th:method="post">
@@ -19,9 +19,16 @@
             <input type="text" class="form-control" id="username" placeholder="Username..." name="username" th:value="*{username}">
         </div>
         <div class="form-group">
+            <label for="firstName" class="font-weight-bold">First Name</label>
+            <input type="text" class="form-control" id="firstName" placeholder="First Name..." name="firstName" th:value="*{firstName}">
+        </div>
+        <div class="form-group">
+            <label for="lastName" class="font-weight-bold">Last Name</label>
+            <input type="text" class="form-control" id="lastName" placeholder="Last Name..." name="lastName" th:value="*{lastName}">
+        </div>
+        <div class="form-group">
             <label for="password" class="font-weight-bold">Password</label>
             <input type="password" class="form-control" id="password" placeholder="Password..." name="password" th:value="*{password}">
-
         </div>
         <div class="form-group">
             <label for="confirmPassword" class="font-weight-bold">Confirm Password</label>
@@ -37,7 +44,7 @@
         </div>
     </form>
 </main>
-<div class="fixed-bottom">
+<div>
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>

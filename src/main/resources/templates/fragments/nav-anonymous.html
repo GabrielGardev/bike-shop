@@ -1,0 +1,23 @@
+<th:block th:fregment>
+
+    <div class="navbar-header ml-3">
+        <a class="navbar-brand font-weight-bold mt-1" th:href="@{/}">
+            <img class="mb-1" th:src="@{/images/bike-logo.png}" th:width="35" th:height="32" alt="header logo"/> Bikecom
+        </a>
+    </div>
+
+    <div class="collapse navbar-collapse flex-column" id="userNav">
+
+        <ul class="navbar-nav w-100 px-3 justify-content-end">
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/users/login}">
+                    <img th:src="@{/images/login-logo.png}" th:width="17" th:height="19" alt="login logo"/> Login</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/users/register}">
+                    <img class="mb-1" th:src="@{/images/user-logo.png}" th:width="18" th:height="18"
+                         alt="register logo"/> Register</a>
+            </li>
+        </ul>
+    </div>
+</th:block>

@@ -1,17 +1,19 @@
 package bikeshop.web.controllers;
 
+import bikeshop.domain.models.binding.UserEditBindingModel;
 import bikeshop.domain.models.binding.UserRegisterBindingModel;
 import bikeshop.domain.models.service.UserServiceModel;
+import bikeshop.domain.models.view.UserProfileViewModel;
 import bikeshop.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/users")
@@ -34,10 +36,10 @@ public class UserController extends BaseController{
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ModelAndView registerConfirm(@ModelAttribute UserRegisterBindingModel model){
-
-        if(!passwordsMatch(model.getPassword(), model.getConfirmPassword())){
-           return view("register");
+    public ModelAndView registerConfirm(@ModelAttribute UserRegisterBindingModel model, RedirectAttributes redirectAttributes){
+        if(this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
+            this.setRedirectsOnRegisterForm(model, redirectAttributes);
+            return redirect("/users/register");
         }
         UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
         userService.registerUser(serviceModel);
@@ -51,7 +53,47 @@ public class UserController extends BaseController{
         return view("user/login");
     }
 
-    private boolean passwordsMatch(String password, String confirmPassword) {
-        return password.equals(confirmPassword);
+    @GetMapping("/profile")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView profile(Principal principal, ModelAndView modelAndView){
+        UserServiceModel user = userService.findUserByUsername(principal.getName());
+        UserProfileViewModel model = mapper.map(user, UserProfileViewModel.class);
+        modelAndView.addObject("model", model);
+
+        return view("user/profile", modelAndView);
+    }
+
+    @GetMapping("/edit")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView editProfile(Principal principal, ModelAndView modelAndView){
+        UserServiceModel user = userService.findUserByUsername(principal.getName());
+        UserProfileViewModel model = mapper.map(user, UserProfileViewModel.class);
+        modelAndView.addObject("model", model);
+
+        return view("user/edit-profile", modelAndView);
+    }
+
+    @PatchMapping("/edit")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView editProfileConfirm(@ModelAttribute UserEditBindingModel model, ModelAndView modelAndView){
+        if (this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
+            return redirect("/users/edit");
+        }
+
+        UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
+        userService.editUserProfile(serviceModel, model.getOldPassword());
+
+        return redirect("/users/profile");
+    }
+
+    private boolean passwordsNotMatch(String password, String confirmPassword) {
+        return !password.equals(confirmPassword);
+    }
+
+    private void setRedirectsOnRegisterForm(UserRegisterBindingModel model, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("username", model.getUsername());
+        redirectAttributes.addFlashAttribute("firstName", model.getFirstName());
+        redirectAttributes.addFlashAttribute("lastName", model.getLastName());
+        redirectAttributes.addFlashAttribute("email", model.getEmail());
     }
 }
