@@ -9,7 +9,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.management.relation.RoleNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -20,12 +19,12 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, ModelMapper modelMapper) {
+    public RoleServiceImpl(RoleRepository roleRepository, ModelMapper mapper) {
         this.roleRepository = roleRepository;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository
                 .findAll()
                 .stream()
-                .map(r -> modelMapper.map(r, RoleServiceModel.class))
+                .map(r -> mapper.map(r, RoleServiceModel.class))
                 .collect(Collectors.toSet());
     }
 
@@ -48,7 +47,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleServiceModel findByAuthority(String authority) {
         Role role = roleRepository.findByAuthority(authority);
 
-        return modelMapper.map(role, RoleServiceModel.class);
+        return mapper.map(role, RoleServiceModel.class);
     }
 
     private List<Role> createAllRoles() {

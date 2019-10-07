@@ -2,7 +2,9 @@ package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.UserEditBindingModel;
 import bikeshop.domain.models.binding.UserRegisterBindingModel;
+import bikeshop.domain.models.service.RoleServiceModel;
 import bikeshop.domain.models.service.UserServiceModel;
+import bikeshop.domain.models.view.UserAllViewModel;
 import bikeshop.domain.models.view.UserProfileViewModel;
 import bikeshop.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -84,6 +89,54 @@ public class UserController extends BaseController{
         userService.editUserProfile(serviceModel, model.getOldPassword());
 
         return redirect("/users/profile");
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView allUsers(ModelAndView modelAndView){
+        List<UserAllViewModel> users = userService.findAll()
+                .stream()
+                .map(u -> {
+                    UserAllViewModel user = mapper.map(u, UserAllViewModel.class);
+                    Set<String> authorities = getAuthoritiesToString(u);
+                    user.setAuthorities(authorities);
+                    return user;
+                })
+                .collect(Collectors.toList());
+
+        modelAndView.addObject("users", users);
+        return view("user/all-users", modelAndView);
+    }
+
+    @PatchMapping("/set-user/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView setUser(@PathVariable String id) {
+        userService.setUserRole(id, "user");
+
+        return super.redirect("/users/all");
+    }
+
+    @PatchMapping("/set-moderator/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView setModerator(@PathVariable String id) {
+        userService.setUserRole(id, "moderator");
+
+        return super.redirect("/users/all");
+    }
+
+    @PatchMapping("/set-admin/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ModelAndView setAdmin(@PathVariable String id) {
+        userService.setUserRole(id, "admin");
+
+        return super.redirect("/users/all");
+    }
+
+    private Set<String> getAuthoritiesToString(UserServiceModel userServiceModel) {
+        return userServiceModel.getAuthorities()
+                .stream()
+                .map(RoleServiceModel::getAuthority)
+                .collect(Collectors.toSet());
     }
 
     private boolean passwordsNotMatch(String password, String confirmPassword) {

@@ -9,4 +9,5 @@ public final class Constants {
 
     public static final String USERNAME_NOT_FOUND = "Username not found!";
     public static final String INCORRECT_PASSWORD = "Incorrect password!";
+    public static final String INCORRECT_ID = "Incorrect id!";
 }

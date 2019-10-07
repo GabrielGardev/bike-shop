@@ -15,20 +15,22 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleService roleService;
-    private final ModelMapper modelMapper;
+    private final ModelMapper mapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper modelMapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, ModelMapper mapper, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.roleService = roleService;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
         roleService.seedRolesInDb();
         this.putProperRoles(userServiceModel);
 
-        User user = modelMapper.map(userServiceModel, User.class);
+        User user = mapper.map(userServiceModel, User.class);
         user.setPassword(bCryptPasswordEncoder.encode(userServiceModel.getPassword()));
         userRepository.save(user);
     }
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserServiceModel findUserByUsername(String username) {
         User user = (User) this.loadUserByUsername(username);
-        return modelMapper.map(user, UserServiceModel.class);
+        return mapper.map(user, UserServiceModel.class);
     }
 
     @Override
@@ -63,6 +65,40 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(userServiceModel.getFirstName());
         user.setLastName(userServiceModel.getLastName());
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserServiceModel> findAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(u -> mapper.map(u, UserServiceModel.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void setUserRole(String id, String role) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+
+        UserServiceModel userServiceModel = mapper.map(user, UserServiceModel.class);
+        userServiceModel.getAuthorities().clear();
+
+        switch (role) {
+            case "user":
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_USER));
+                break;
+            case "moderator":
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_USER));
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_MODERATOR));
+                break;
+            case "admin":
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_USER));
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_MODERATOR));
+                userServiceModel.getAuthorities().add(roleService.findByAuthority(Constants.ROLE_ADMIN));
+                break;
+        }
+
+        this.userRepository.saveAndFlush(mapper.map(userServiceModel, User.class));
     }
 
 
