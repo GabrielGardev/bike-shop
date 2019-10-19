@@ -89,4 +89,14 @@ public class CategoryController extends BaseController {
 
         return redirect("/categories/all");
     }
+
+    @GetMapping("/fetch")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @ResponseBody
+    public List<CategoryViewModel> fetchCategories() {
+        return categoryService.findAllCategories()
+                .stream()
+                .map(c -> mapper.map(c, CategoryViewModel.class))
+                .collect(Collectors.toList());
+    }
 }

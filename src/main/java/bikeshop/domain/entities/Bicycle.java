@@ -13,9 +13,9 @@ public class Bicycle extends BaseEntity{
     private String description;
     private String color;
     private BigDecimal price;
+    private String imageUrl;
     private Category category;
     private Set<BicycleSize> bicycleSize;
-    private Set<Image> images;
     private Set<Component> components;
 
     @Column(nullable = false)
@@ -63,6 +63,15 @@ public class Bicycle extends BaseEntity{
         this.price = price;
     }
 
+    @Column(name = "image_url")
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String image) {
+        this.imageUrl = image;
+    }
+
     @ManyToOne(targetEntity = Category.class)
     @JoinColumn(name = "category", referencedColumnName = "id", nullable = false)
     public Category getCategory() {
@@ -91,15 +100,6 @@ public class Bicycle extends BaseEntity{
 
     public void setBicycleSize(Set<BicycleSize> bicycleSize) {
         this.bicycleSize = bicycleSize;
-    }
-
-    @OneToMany(mappedBy = "bicycle")
-    public Set<Image> getImages() {
-        return images;
-    }
-
-    public void setImages(Set<Image> images) {
-        this.images = images;
     }
 
     @ManyToMany(targetEntity = Component.class)

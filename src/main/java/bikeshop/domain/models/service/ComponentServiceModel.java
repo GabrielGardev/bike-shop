@@ -1,15 +1,11 @@
-package bikeshop.domain.entities;
+package bikeshop.domain.models.service;
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "components")
-public class Component extends BaseEntity{
+public class ComponentServiceModel extends BaseServiceModel{
 
     private String type;
     private String description;
 
-    @Column(nullable = false, updatable = false)
     public String getType() {
         return type;
     }
@@ -18,7 +14,6 @@ public class Component extends BaseEntity{
         this.type = type;
     }
 
-    @Column(nullable = false)
     public String getDescription() {
         return description;
     }
