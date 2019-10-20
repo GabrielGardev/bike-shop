@@ -3,6 +3,7 @@ package bikeshop.web.controllers;
 import bikeshop.domain.models.binding.BicycleAddBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.domain.models.service.ComponentServiceModel;
+import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
@@ -20,7 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/bicycles")
@@ -55,7 +58,19 @@ public class BicycleController extends BaseController {
         serviceModel.setComponents(this.setComponents(model));
         bicycleService.addBicycle(serviceModel);
 
-        return redirect("/home");
+        return redirect("/bicycles/all");
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ModelAndView allBicycles(ModelAndView modelAndView) {
+        List<BicycleViewModel> bicycles = bicycleService.findAll()
+                .stream()
+                .map(bike -> mapper.map(bike, BicycleViewModel.class))
+                .collect(Collectors.toList());
+        modelAndView.addObject("bicycles", bicycles);
+
+        return view("bicycle/all-bicycles", modelAndView);
     }
 
     private Set<ComponentServiceModel> setComponents(BicycleAddBindingModel model) throws IllegalAccessException {

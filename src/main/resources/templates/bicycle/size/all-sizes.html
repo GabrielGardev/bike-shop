@@ -22,7 +22,7 @@
             <tbody>
             <th:block th:each="size, iter : ${sizes}">
                 <tr>
-                    <td th:text="${iter.index + 1}"></td>
+                    <th th:text="${iter.index + 1}"></th>
                     <td th:text="${size.name}"></td>
                 </tr>
             </th:block>

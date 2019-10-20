@@ -35,13 +35,34 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public void addBicycle(BicycleServiceModel bicycleServiceModel) {
-        Bicycle bicycle = mapper.map(bicycleServiceModel, Bicycle.class);
-        Category category = mapper.map(categoryService.findById(bicycleServiceModel.getCategory()), Category.class);
-        Set<BicycleSize> sizes = new HashSet<>(bicycleSizeRepository.findAllById(bicycleServiceModel.getBicycleSize()));
+        Bicycle bicycle = mapper
+                .map(bicycleServiceModel, Bicycle.class);
+        Category category = mapper
+                .map(categoryService.findById(bicycleServiceModel.getCategory()), Category.class);
+        Set<BicycleSize> sizes =
+                new HashSet<>(bicycleSizeRepository.findAllById(bicycleServiceModel.getBicycleSize()));
 
         bicycle.setCategory(category);
         bicycle.setBicycleSize(sizes);
 
         bicycleRepository.save(bicycle);
+    }
+
+    @Override
+    public List<BicycleServiceModel> findAll() {
+        return bicycleRepository.findAll()
+                .stream()
+                .map(bike -> {
+                    BicycleServiceModel serviceModel = mapper.map(bike, BicycleServiceModel.class);
+                    serviceModel.setCategory(bike.getCategory().getName());
+
+                    Set<String> sizes = bike.getBicycleSize()
+                            .stream()
+                            .map(BicycleSize::getName)
+                            .collect(Collectors.toSet());
+                    serviceModel.setBicycleSize(sizes);
+                    return serviceModel;
+                })
+                .collect(Collectors.toList());
     }
 }
