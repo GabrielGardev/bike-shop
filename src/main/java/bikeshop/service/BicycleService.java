@@ -9,4 +9,6 @@ public interface BicycleService {
     void addBicycle(BicycleServiceModel bicycleServiceModel);
 
     List<BicycleServiceModel> findAll();
+
+    BicycleServiceModel findById(String id);
 }

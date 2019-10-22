@@ -1,5 +1,6 @@
 package bikeshop.service.impl;
 
+import bikeshop.common.Constants;
 import bikeshop.domain.entities.Bicycle;
 import bikeshop.domain.entities.BicycleSize;
 import bikeshop.domain.entities.Category;
@@ -56,13 +57,28 @@ public class BicycleServiceImpl implements BicycleService {
                     BicycleServiceModel serviceModel = mapper.map(bike, BicycleServiceModel.class);
                     serviceModel.setCategory(bike.getCategory().getName());
 
-                    Set<String> sizes = bike.getBicycleSize()
-                            .stream()
-                            .map(BicycleSize::getName)
-                            .collect(Collectors.toSet());
-                    serviceModel.setBicycleSize(sizes);
+                    serviceModel.setBicycleSize(this.getSizes(bike));
                     return serviceModel;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public BicycleServiceModel findById(String id) {
+        Bicycle bicycle = bicycleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+
+        BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
+        serviceModel.setCategory(bicycle.getCategory().getName());
+        serviceModel.setBicycleSize(this.getSizes(bicycle));
+
+        return serviceModel;
+    }
+
+    private Set<String> getSizes(Bicycle bike) {
+        return bike.getBicycleSize()
+                .stream()
+                .map(BicycleSize::getName)
+                .collect(Collectors.toSet());
     }
 }

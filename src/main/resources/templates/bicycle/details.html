@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/pop-up.images.css}">
+    <script th:src="@{/js/pop-up.images.js}"></script>
+</head>
+<body>
+<header>
+    <th:block th:include="~{fragments/navbar}"></th:block>
+</header>
+<main>
+    <div class="jumbotron bg-white">
+        <div class="container" th:object="${bicycle}">
+            <div class="row">
+                <div class="offset-md-7">
+                    <h1 th:text="'Bicycle ' + *{make} + ' ' + *{model} + '-' + ${#strings.toUpperCase(bicycle.color)}"></h1>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-6">
+                    <a class="image-link" th:href="*{imageUrl}">
+                        <img class="text-left img-fluid" th:src="*{imageUrl}" alt="Bicycle">
+                    </a>
+                </div>
+                <div class="offset-1">
+                    <div class="bg-light p-3 border border-secondary">
+                        <form th:action="@{/order/order-details}" th:method="post">
+                            <div class="form-group">
+                                <p class="mb-0">Price</p>
+                                <h3 th:text="*{price} + '$'"></h3>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label for="select-sizes">Size:</label>
+                                <br>
+                                <select required id="select-sizes" name="bicycleSize">
+                                    <option selected disabled >Select an option</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="select-quantity">Quantity</label>
+                                <br>
+                                <input required type="number" step="1" min="1" max="100" id="select-quantity" name="quantity">
+                            </div>
+                            <hr>
+                            <div class="button-holder d-flex justify-content-center">
+                                <button type="submit" class="btn btn-danger font-weight-bold">Buy now</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="text-center">Description</h4>
+                    <div th:text="*{description}"></div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-8">
+                    <h3 class="h3">Specification</h3>
+                    <table class="table table-striped table-bordered">
+                        <tbody>
+                            <th:block th:each="component : *{components}">
+                                <tr>
+                                    <td th:text="${#strings.toUpperCase(component.type)}"></td>
+                                    <td th:text="${#strings.toUpperCase(component.description)}"></td>
+                                </tr>
+                            </th:block>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <div class="accordion" id="accordionExample">
+                        <div class="card z-depth-0 bordered">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                            aria-expanded="true" aria-controls="collapseOne">
+                                        24 months warranty
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                 data-parent="#accordionExample">
+                                <div class="card-body">
+                                    All products come with a 24 month warranty. To find out the terms and other additional information, please read the warranty service page.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-0 bordered">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Free shipping over 50$ *
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Orders over 50$ are with free shipping.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-0 bordered">
+                            <div class="card-header" id="headingThree">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        5 shops in Bulgaria. Buy online and pick up from our store.
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    You can order online with the "Get from our store" option.
+                                    This will give you the opportunity to pick up the products
+                                    you want in one of our 8 stores in Bulgaria.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-0 bordered">
+                            <div class="card-header" id="headingFour">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                                        When will i receive?
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    Delivery of products purchased online takes 3 business days after your order is confirmed.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card z-depth-0 bordered">
+                            <div class="card-header" id="headingFive">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                            data-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                                        Questions about the product.
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="collapseFive" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p class="font-italic">Got a question for product? You can contact us:</p>
+
+                                    Mobile Phone: 0000 000 000
+                                    <br>
+                                    Email: bikecom@bikecom.bg
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<div>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+<script>
+    $(document).ready(function () {
+        $('.image-link').magnificPopup({
+            type: 'image',
+            mainClass: 'mfp-with-zoom',
+
+            zoom: {
+                enabled: true,
+
+                duration: 300,
+                easing: 'ease-in-out',
+                opener: function(openerElement) {
+                    return openerElement.is('img') ? openerElement : openerElement.find('img');
+                }
+            }
+        });
+    });
+</script>
+<script>
+    $('.collapse').collapse()
+</script>
+<script>
+    fetch('/sizes/fetch')
+        .then((response) => response.json())
+    .then((json) => {
+        json.forEach((size) => $('#select-sizes')
+            .append(`<option value="${size.id}">${size.name}</option>`));
+    })
+    .catch((err) => console.log(err));
+</script>
+</html>
