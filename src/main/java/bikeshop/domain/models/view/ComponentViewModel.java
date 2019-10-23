@@ -1,6 +1,6 @@
 package bikeshop.domain.models.view;
 
-public class ComponentViewModel {
+public class ComponentViewModel implements Comparable<ComponentViewModel>{
 
     private String id;
     private String type;
@@ -28,5 +28,10 @@ public class ComponentViewModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(ComponentViewModel o) {
+        return type.compareTo(o.getType());
     }
 }

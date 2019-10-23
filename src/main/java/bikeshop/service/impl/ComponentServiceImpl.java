@@ -1,5 +1,6 @@
 package bikeshop.service.impl;
 
+import bikeshop.common.Constants;
 import bikeshop.domain.entities.Component;
 import bikeshop.domain.models.service.ComponentServiceModel;
 import bikeshop.repository.ComponentRepository;
@@ -31,5 +32,13 @@ public class ComponentServiceImpl implements ComponentService {
         }
         Component component = mapper.map(componentServiceModel, Component.class);
         return mapper.map(componentRepository.save(component), ComponentServiceModel.class);
+    }
+
+    @Override
+    public void editById(String id, String description) {
+        Component component = componentRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+        component.setDescription(description);
+        componentRepository.save(component);
     }
 }

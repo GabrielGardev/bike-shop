@@ -11,4 +11,6 @@ public interface BicycleService {
     List<BicycleServiceModel> findAll();
 
     BicycleServiceModel findById(String id);
+
+    void editById(String id, BicycleServiceModel model);
 }

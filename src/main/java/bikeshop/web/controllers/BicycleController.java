@@ -1,9 +1,11 @@
 package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.BicycleAddBindingModel;
+import bikeshop.domain.models.binding.BicycleEditBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.domain.models.service.ComponentServiceModel;
 import bikeshop.domain.models.view.BicycleViewModel;
+import bikeshop.domain.models.view.ComponentViewModel;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
@@ -17,9 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -78,6 +78,25 @@ public class BicycleController extends BaseController {
         modelAndView.addObject("bicycle", bicycle);
 
         return view("bicycle/details", modelAndView);
+    }
+
+    @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
+        BicycleServiceModel serviceModel = bicycleService.findById(id);
+        BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
+        modelAndView.addObject("bicycle", bicycle);
+
+        return view("bicycle/edit-bicycle", modelAndView);
+    }
+
+    @PatchMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ModelAndView editConfirm(@PathVariable String id,
+                                    @ModelAttribute BicycleEditBindingModel model) {
+        BicycleServiceModel serviceModel = mapper.map(model, BicycleServiceModel.class);
+        bicycleService.editById(id, serviceModel);
+        return redirect("/bicycles/all");
     }
 
     private Set<ComponentServiceModel> setComponents(BicycleAddBindingModel model) throws IllegalAccessException {

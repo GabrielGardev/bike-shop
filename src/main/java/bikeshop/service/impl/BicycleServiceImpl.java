@@ -7,6 +7,7 @@ import bikeshop.domain.entities.Category;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.repository.BicycleRepository;
 import bikeshop.repository.BicycleSizeRepository;
+import bikeshop.repository.CategoryRepository;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -22,13 +23,15 @@ import java.util.stream.Collectors;
 public class BicycleServiceImpl implements BicycleService {
 
     private final BicycleRepository bicycleRepository;
+    private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
     private final BicycleSizeRepository bicycleSizeRepository;
     private final ModelMapper mapper;
 
     @Autowired
-    public BicycleServiceImpl(BicycleRepository bicycleRepository, CategoryService categoryService, BicycleSizeRepository bicycleSizeRepository, ModelMapper mapper) {
+    public BicycleServiceImpl(BicycleRepository bicycleRepository, CategoryRepository categoryRepository, CategoryService categoryService, BicycleSizeRepository bicycleSizeRepository, ModelMapper mapper) {
         this.bicycleRepository = bicycleRepository;
+        this.categoryRepository = categoryRepository;
         this.categoryService = categoryService;
         this.bicycleSizeRepository = bicycleSizeRepository;
         this.mapper = mapper;
@@ -65,8 +68,7 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public BicycleServiceModel findById(String id) {
-        Bicycle bicycle = bicycleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+        Bicycle bicycle = getBicycleById(id);
 
         BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
         serviceModel.setCategory(bicycle.getCategory().getName());
@@ -75,10 +77,31 @@ public class BicycleServiceImpl implements BicycleService {
         return serviceModel;
     }
 
+    @Override
+    public void editById(String id, BicycleServiceModel model) {
+        Bicycle bicycle = getBicycleById(id);
+
+        bicycle.setMake(model.getMake());
+        bicycle.setModel(model.getModel());
+        bicycle.setColor(model.getColor());
+        bicycle.setPrice(model.getPrice());
+        bicycle.setDescription(model.getDescription());
+        bicycle.setCategory(categoryRepository.findByName(model.getCategory()));
+        Set<BicycleSize> sizes =
+                new HashSet<>(bicycleSizeRepository.findAllByName(model.getBicycleSize()));
+        bicycle.setBicycleSize(sizes);
+        bicycleRepository.save(bicycle);
+    }
+
     private Set<String> getSizes(Bicycle bike) {
         return bike.getBicycleSize()
                 .stream()
                 .map(BicycleSize::getName)
                 .collect(Collectors.toSet());
+    }
+
+    private Bicycle getBicycleById(String id) {
+        return bicycleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
     }
 }

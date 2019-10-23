@@ -1,27 +1,17 @@
-package bikeshop.domain.models.view;
+package bikeshop.domain.models.binding;
 
 import java.math.BigDecimal;
 import java.util.Set;
-public class BicycleViewModel {
 
-    private String id;
+public class BicycleEditBindingModel {
+
     private String make;
     private String model;
     private String description;
     private String color;
     private BigDecimal price;
-    private String imageUrl;
     private String category;
     private Set<String> bicycleSize;
-    private Set<ComponentViewModel> components;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getMake() {
         return make;
@@ -63,14 +53,6 @@ public class BicycleViewModel {
         this.price = price;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -85,13 +67,5 @@ public class BicycleViewModel {
 
     public void setBicycleSize(Set<String> bicycleSize) {
         this.bicycleSize = bicycleSize;
-    }
-
-    public Set<ComponentViewModel> getComponents() {
-        return components;
-    }
-
-    public void setComponents(Set<ComponentViewModel> components) {
-        this.components = components;
     }
 }
