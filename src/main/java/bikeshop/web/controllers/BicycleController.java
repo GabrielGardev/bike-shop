@@ -99,6 +99,13 @@ public class BicycleController extends BaseController {
         return redirect("/bicycles/all");
     }
 
+    @PatchMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ModelAndView delete(@PathVariable String id) {
+        bicycleService.deleteBicycleById(id);
+        return redirect("/bicycles/all");
+    }
+
     private Set<ComponentServiceModel> setComponents(BicycleAddBindingModel model) throws IllegalAccessException {
         Set<ComponentServiceModel> components = new HashSet<>();
         for (Field field : model.getClass().getDeclaredFields()) {

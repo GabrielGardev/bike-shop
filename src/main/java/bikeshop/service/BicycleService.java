@@ -13,4 +13,6 @@ public interface BicycleService {
     BicycleServiceModel findById(String id);
 
     void editById(String id, BicycleServiceModel model);
+
+    void deleteBicycleById(String id);
 }

@@ -93,6 +93,11 @@ public class BicycleServiceImpl implements BicycleService {
         bicycleRepository.save(bicycle);
     }
 
+    @Override
+    public void deleteBicycleById(String id) {
+        bicycleRepository.deleteById(id);
+    }
+
     private Set<String> getSizes(Bicycle bike) {
         return bike.getBicycleSize()
                 .stream()
