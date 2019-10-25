@@ -86,16 +86,36 @@ public class BicycleServiceImpl implements BicycleService {
         bicycle.setColor(model.getColor());
         bicycle.setPrice(model.getPrice());
         bicycle.setDescription(model.getDescription());
-        bicycle.setCategory(categoryRepository.findByName(model.getCategory()));
+
+        Category category = categoryRepository.findByName(model.getCategory());
+        bicycle.setCategory(category);
+
         Set<BicycleSize> sizes =
                 new HashSet<>(bicycleSizeRepository.findAllByName(model.getBicycleSize()));
         bicycle.setBicycleSize(sizes);
+
         bicycleRepository.save(bicycle);
     }
 
     @Override
     public void deleteBicycleById(String id) {
-        bicycleRepository.deleteById(id);
+        Bicycle bicycle = getBicycleById(id);
+        bicycleRepository.delete(bicycle);
+    }
+
+    @Override
+    public List<BicycleServiceModel> findAllByCategory(String category) {
+        return  bicycleRepository.findAllByCategoryName(category)
+                .stream()
+                .map(bicycle -> {
+                    BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
+
+                    serviceModel.setCategory(category);
+                    serviceModel.setBicycleSize(this.getSizes(bicycle));
+
+                    return serviceModel;
+                })
+                .collect(Collectors.toList());
     }
 
     private Set<String> getSizes(Bicycle bike) {

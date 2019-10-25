@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="bg-light p-3 border border-secondary">
-                        <form th:action="@{/order/order-details}" th:method="post">
+                        <form th:action="@{/orders/order-details/{id}(id=*{id})}" th:method="post">
                             <div class="form-group">
                                 <p class="mb-0">Price</p>
                                 <h3 th:text="*{price} + '$'"></h3>
@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <label for="select-sizes">Size:</label>
                                 <br>
-                                <select required id="select-sizes" name="bicycleSize">
+                                <select required id="select-sizes"  name="bicycleSize">
                                     <option selected disabled >Select an option</option>
                                     <th:block th:each="size : *{bicycleSize}">
                                         <option th:text="${size}"></option>
@@ -47,7 +47,9 @@
                             <div class="form-group">
                                 <label for="select-quantity">Quantity</label>
                                 <br>
-                                <input required type="number" th:value="1" step="1" min="1" max="100" id="select-quantity" name="quantity">
+                                <input required type="number"
+                                       th:value="1" step="1" min="1" max="100"
+                                       id="select-quantity" name="quantity">
                             </div>
                             <hr>
                             <div class="button-holder d-flex justify-content-center">
