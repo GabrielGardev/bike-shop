@@ -1,13 +1,15 @@
 package bikeshop.domain.models.view;
 
+import java.math.BigDecimal;
+
 public class OrderViewModel {
 
     private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
+    private BicycleViewModel bicycle;
+    private UserProfileViewModel user;
     private String bicycleSize;
     private int quantity;
+    private BigDecimal totalPrice;
 
     public String getId() {
         return id;
@@ -17,28 +19,20 @@ public class OrderViewModel {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public BicycleViewModel getBicycle() {
+        return bicycle;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setBicycle(BicycleViewModel bicycle) {
+        this.bicycle = bicycle;
     }
 
-    public String getLastName() {
-        return lastName;
+    public UserProfileViewModel getUser() {
+        return user;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUser(UserProfileViewModel user) {
+        this.user = user;
     }
 
     public String getBicycleSize() {
@@ -57,4 +51,11 @@ public class OrderViewModel {
         this.quantity = quantity;
     }
 
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }

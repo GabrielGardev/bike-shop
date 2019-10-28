@@ -1,12 +1,30 @@
-package bikeshop.domain.models.binding;
+package bikeshop.domain.models.service;
 
 import java.math.BigDecimal;
 
-public class OrderCreateBindingModel {
+public class OrderServiceModel extends BaseServiceModel {
 
+    private BicycleServiceModel bicycle;
+    private UserServiceModel user;
     private String bicycleSize;
     private int quantity;
     private BigDecimal totalPrice;
+
+    public BicycleServiceModel getBicycle() {
+        return bicycle;
+    }
+
+    public void setBicycle(BicycleServiceModel bicycle) {
+        this.bicycle = bicycle;
+    }
+
+    public UserServiceModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserServiceModel user) {
+        this.user = user;
+    }
 
     public String getBicycleSize() {
         return bicycleSize;

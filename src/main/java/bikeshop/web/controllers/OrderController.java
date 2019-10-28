@@ -1,12 +1,9 @@
 package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.OrderCreateBindingModel;
-import bikeshop.domain.models.service.BicycleServiceModel;
-import bikeshop.domain.models.service.UserServiceModel;
-import bikeshop.domain.models.view.BicycleViewModel;
+import bikeshop.domain.models.service.OrderServiceModel;
 import bikeshop.domain.models.view.OrderViewModel;
-import bikeshop.service.BicycleService;
-import bikeshop.service.UserService;
+import bikeshop.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,38 +17,39 @@ import java.security.Principal;
 @RequestMapping("/orders")
 public class OrderController extends BaseController {
 
-    private final BicycleService bicycleService;
-    private final UserService userService;
+    private final OrderService orderService;
     private final ModelMapper mapper;
 
     @Autowired
-    public OrderController(BicycleService bicycleService, UserService userService, ModelMapper mapper) {
-        this.bicycleService = bicycleService;
-        this.userService = userService;
+    public OrderController(OrderService orderService, ModelMapper mapper) {
+        this.orderService = orderService;
         this.mapper = mapper;
     }
 
     @PostMapping("/order-details/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView orderBicycle(@PathVariable String id,
+    public ModelAndView orderBicycle(@PathVariable(name = "id") String bicycleId,
                                      @ModelAttribute OrderCreateBindingModel model,
                                      ModelAndView modelAndView,
                                      Principal principal){
-        BicycleServiceModel serviceModel = bicycleService.findById(id);
 
-        BicycleViewModel bicycleViewModel = mapper.map(serviceModel, BicycleViewModel.class);
-        OrderViewModel orderViewModel = mapper.map(model, OrderViewModel.class);
-        this.setUserToViewModel(principal.getName(), orderViewModel);
+        OrderServiceModel serviceModel = mapper.map(model, OrderServiceModel.class);
+        OrderServiceModel order = orderService.viewOrder(bicycleId, principal.getName(), serviceModel);
+        OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
 
-        modelAndView.addObject("bicycle", bicycleViewModel);
         modelAndView.addObject("order", orderViewModel);
         return view("order/order-details", modelAndView);
     }
 
-    private void setUserToViewModel(String name, OrderViewModel orderViewModel) {
-        UserServiceModel user = userService.findUserByUsername(name);
-        orderViewModel.setFirstName(user.getFirstName());
-        orderViewModel.setLastName(user.getLastName());
-        orderViewModel.setEmail(user.getEmail());
+    @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView orderBicycleConfirm(@RequestParam String bicycleId,
+                                            @RequestParam String bicycleSize,
+                                            @RequestParam String quantity,
+                                            @RequestParam String totalPrice,
+                                            Principal principal){
+        orderService.createOrder(bicycleId, bicycleSize, quantity, totalPrice, principal.getName());
+
+        return view("order/user-orders");
     }
 }
