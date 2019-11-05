@@ -10,6 +10,7 @@ public class OrderViewModel {
     private String bicycleSize;
     private int quantity;
     private BigDecimal totalPrice;
+    private String finishedOn;
 
     public String getId() {
         return id;
@@ -57,5 +58,13 @@ public class OrderViewModel {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getDate() {
+        return finishedOn;
+    }
+
+    public void setDate(String finishedOn) {
+        this.finishedOn = finishedOn;
     }
 }

@@ -1,6 +1,7 @@
 package bikeshop.domain.models.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class OrderServiceModel extends BaseServiceModel {
 
@@ -9,6 +10,7 @@ public class OrderServiceModel extends BaseServiceModel {
     private String bicycleSize;
     private int quantity;
     private BigDecimal totalPrice;
+    private LocalDateTime finishedOn;
 
     public BicycleServiceModel getBicycle() {
         return bicycle;
@@ -48,5 +50,13 @@ public class OrderServiceModel extends BaseServiceModel {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public LocalDateTime getFinishedOn() {
+        return finishedOn;
+    }
+
+    public void setFinishedOn(LocalDateTime finishedOn) {
+        this.finishedOn = finishedOn;
     }
 }

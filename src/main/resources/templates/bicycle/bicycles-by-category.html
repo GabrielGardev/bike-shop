@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bicycle-cards.css}">
+</head>
+<body>
+<header>
+    <th:block th:include="~{fragments/navbar}"></th:block>
+</header>
+<main>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <div class="row">
+        <th:block th:each="bicycle : ${bicycles}">
+            <div class="col-md-4">
+            <div class="container page-wrapper">
+                <div class="page-inner">
+                    <div class="row">
+                        <div class="el-wrapper">
+                            <div class="box-up">
+                                <a th:href="@{/bicycles/details/{id}(id=${bicycle.id})}">
+                                    <img class="img img-fluid" th:src="${bicycle.imageUrl}" alt="Bicycle">
+                                </a>
+                                <div class="img-info">
+                                    <div class="info-inner">
+                                        <span class="p-name" th:text="${bicycle.model}"></span>
+                                        <span class="p-company" th:text="${bicycle.make}"></span>
+                                    </div>
+                                    <div class="a-size">Available sizes :
+                                        <span class="size" th:text="${#strings.listJoin(#lists.sort(bicycle.bicycleSize), ', ')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="box-down">
+                                <div class="h-bg">
+                                    <div class="h-bg-inner"></div>
+                                </div>
+
+                                <a class="cart" th:href="@{/bicycles/details/{id}(id=${bicycle.id})}">
+                                    <span class="price" th:text="'$' + ${bicycle.price}"></span>
+                                    <span class="add-to-cart">
+                                    <span class="txt">Buy</span>
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </th:block>
+        </div>
+    </div>
+</div>
+</main>
+<div>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>

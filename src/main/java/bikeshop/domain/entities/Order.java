@@ -2,6 +2,7 @@ package bikeshop.domain.entities;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "orders")
@@ -12,6 +13,7 @@ public class Order extends BaseEntity {
     private BicycleSize bicycleSize;
     private Integer quantity;
     private BigDecimal totalPrice;
+    private LocalDateTime finishedOn;
 
     @ManyToOne
     @JoinColumn(name = "bicycle_id", referencedColumnName = "id")
@@ -59,5 +61,14 @@ public class Order extends BaseEntity {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    @Column(name = "finished_on")
+    public LocalDateTime getFinishedOn() {
+        return finishedOn;
+    }
+
+    public void setFinishedOn(LocalDateTime finishedOn) {
+        this.finishedOn = finishedOn;
     }
 }

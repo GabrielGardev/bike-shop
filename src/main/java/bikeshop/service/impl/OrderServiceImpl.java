@@ -12,11 +12,15 @@ import bikeshop.repository.BicycleSizeRepository;
 import bikeshop.repository.OrderRepository;
 import bikeshop.repository.UserRepository;
 import bikeshop.service.OrderService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static bikeshop.common.Constants.*;
 
@@ -29,15 +33,17 @@ public class OrderServiceImpl implements OrderService {
     private final UserServiceImpl userService;
     private final OrderRepository orderRepository;
     private final BicycleSizeRepository sizeRepository;
+    private final ModelMapper mapper;
 
     @Autowired
-    public OrderServiceImpl(BicycleServiceImpl bicycleService, BicycleRepository bicycleRepository, UserRepository userRepository, UserServiceImpl userService, OrderRepository orderRepository, BicycleSizeRepository sizeRepository) {
+    public OrderServiceImpl(BicycleServiceImpl bicycleService, BicycleRepository bicycleRepository, UserRepository userRepository, UserServiceImpl userService, OrderRepository orderRepository, BicycleSizeRepository sizeRepository, ModelMapper mapper) {
         this.bicycleService = bicycleService;
         this.bicycleRepository = bicycleRepository;
         this.userRepository = userRepository;
         this.userService = userService;
         this.orderRepository = orderRepository;
         this.sizeRepository = sizeRepository;
+        this.mapper = mapper;
     }
 
     @Override
@@ -71,6 +77,31 @@ public class OrderServiceImpl implements OrderService {
         order.setBicycleSize(bicycleSize);
         order.setQuantity(Integer.valueOf(quantity));
         order.setTotalPrice(BigDecimal.valueOf(Double.parseDouble(totalPrice)));
+        order.setFinishedOn(LocalDateTime.now());
         orderRepository.save(order);
+    }
+
+    @Override
+    public List<OrderServiceModel> findAllOrders() {
+        return orderRepository.findAll()
+                .stream()
+                .map(o -> {
+                    OrderServiceModel model = mapper.map(o, OrderServiceModel.class);
+                    model.setBicycleSize(o.getBicycleSize().getName());
+                    return model;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderServiceModel> findByCustomerName(String username) {
+        return orderRepository.findAllByUserUsername(username)
+                .stream()
+                .map(o -> {
+                    OrderServiceModel model = mapper.map(o, OrderServiceModel.class);
+                    model.setBicycleSize(o.getBicycleSize().getName());
+                    return model;
+                })
+                .collect(Collectors.toList());
     }
 }

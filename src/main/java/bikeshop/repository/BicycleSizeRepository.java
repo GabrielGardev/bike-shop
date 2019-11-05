@@ -9,8 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface BicycleSizeRepository extends JpaRepository<BicycleSize, String> {
-
-    Set<BicycleSize> findAllByName(Set<String> bicycleSize);
-
     Optional<BicycleSize> findByName(String name);
 }

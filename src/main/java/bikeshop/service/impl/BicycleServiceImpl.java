@@ -56,13 +56,7 @@ public class BicycleServiceImpl implements BicycleService {
     public List<BicycleServiceModel> findAll() {
         return bicycleRepository.findAll()
                 .stream()
-                .map(bike -> {
-                    BicycleServiceModel serviceModel = mapper.map(bike, BicycleServiceModel.class);
-                    serviceModel.setCategory(bike.getCategory().getName());
-
-                    serviceModel.setBicycleSize(this.getSizes(bike));
-                    return serviceModel;
-                })
+                .map(this::getBicycleServiceModel)
                 .collect(Collectors.toList());
     }
 
@@ -70,11 +64,7 @@ public class BicycleServiceImpl implements BicycleService {
     public BicycleServiceModel findById(String id) {
         Bicycle bicycle = getBicycleById(id);
 
-        BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
-        serviceModel.setCategory(bicycle.getCategory().getName());
-        serviceModel.setBicycleSize(this.getSizes(bicycle));
-
-        return serviceModel;
+        return this.getBicycleServiceModel(bicycle);
     }
 
     @Override
@@ -90,8 +80,10 @@ public class BicycleServiceImpl implements BicycleService {
         Category category = categoryRepository.findByName(model.getCategory());
         bicycle.setCategory(category);
 
-        Set<BicycleSize> sizes =
-                new HashSet<>(bicycleSizeRepository.findAllByName(model.getBicycleSize()));
+        Set<BicycleSize> sizes = bicycleSizeRepository.findAll()
+                .stream()
+                .filter(c -> model.getBicycleSize().contains(c.getName()))
+                .collect(Collectors.toSet());
         bicycle.setBicycleSize(sizes);
 
         bicycleRepository.save(bicycle);
@@ -107,15 +99,17 @@ public class BicycleServiceImpl implements BicycleService {
     public List<BicycleServiceModel> findAllByCategory(String category) {
         return  bicycleRepository.findAllByCategoryName(category)
                 .stream()
-                .map(bicycle -> {
-                    BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
-
-                    serviceModel.setCategory(category);
-                    serviceModel.setBicycleSize(this.getSizes(bicycle));
-
-                    return serviceModel;
-                })
+                .map(this::getBicycleServiceModel)
                 .collect(Collectors.toList());
+    }
+
+    private BicycleServiceModel getBicycleServiceModel(Bicycle bicycle) {
+        BicycleServiceModel serviceModel = mapper.map(bicycle, BicycleServiceModel.class);
+
+        serviceModel.setCategory(bicycle.getCategory().getName());
+        serviceModel.setBicycleSize(this.getSizes(bicycle));
+
+        return serviceModel;
     }
 
     private Set<String> getSizes(Bicycle bike) {

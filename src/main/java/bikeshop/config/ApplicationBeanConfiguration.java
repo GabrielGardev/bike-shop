@@ -1,6 +1,5 @@
 package bikeshop.config;
 
-import bikeshop.mappings.MappingsInitializer;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ public class ApplicationBeanConfiguration {
 
     static {
         mapper = new ModelMapper();
-        MappingsInitializer.initMappings(mapper);
     }
 
     @Bean

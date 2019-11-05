@@ -17,6 +17,10 @@
                          alt="register logo"/> Profile</a>
             </li>
 
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/orders/customer}">My Orders</a>
+            </li>
+
             <th:block sec:authorize="hasRole('ROLE_MODERATOR')">
                 <li class="nav-item">
                     <div class="dropdown">

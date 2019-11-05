@@ -4,6 +4,7 @@ import bikeshop.domain.models.binding.BicycleAddBindingModel;
 import bikeshop.domain.models.binding.BicycleEditBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.domain.models.service.ComponentServiceModel;
+import bikeshop.domain.models.view.BicycleByCategoryViewModel;
 import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.ComponentViewModel;
 import bikeshop.service.BicycleService;
@@ -104,6 +105,19 @@ public class BicycleController extends BaseController {
     public ModelAndView delete(@PathVariable String id) {
         bicycleService.deleteBicycleById(id);
         return redirect("/bicycles/all");
+    }
+
+    @GetMapping("/{name}")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView getBicyclesByCategoryId(@PathVariable String name, ModelAndView modelAndView) {
+        List<BicycleByCategoryViewModel> allByCategoryId = bicycleService.findAllByCategory(name)
+                .stream()
+                .map(bike -> mapper.map(bike, BicycleByCategoryViewModel.class))
+                .collect(Collectors.toList());
+
+        modelAndView.addObject("bicycles", allByCategoryId);
+
+        return view("bicycle/bicycles-by-category", modelAndView);
     }
 
     private Set<ComponentServiceModel> setComponents(BicycleAddBindingModel model) throws IllegalAccessException {
