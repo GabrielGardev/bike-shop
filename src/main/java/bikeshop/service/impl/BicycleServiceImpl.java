@@ -5,6 +5,9 @@ import bikeshop.domain.entities.Bicycle;
 import bikeshop.domain.entities.BicycleSize;
 import bikeshop.domain.entities.Category;
 import bikeshop.domain.models.service.BicycleServiceModel;
+import bikeshop.error.BicycleAlreadyExistException;
+import bikeshop.error.BicycleNotFoundException;
+import bikeshop.error.CategoryNotFoundException;
 import bikeshop.repository.BicycleRepository;
 import bikeshop.repository.BicycleSizeRepository;
 import bikeshop.repository.CategoryRepository;
@@ -19,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static bikeshop.common.Constants.*;
+
 @Service
 public class BicycleServiceImpl implements BicycleService {
 
@@ -29,7 +34,11 @@ public class BicycleServiceImpl implements BicycleService {
     private final ModelMapper mapper;
 
     @Autowired
-    public BicycleServiceImpl(BicycleRepository bicycleRepository, CategoryRepository categoryRepository, CategoryService categoryService, BicycleSizeRepository bicycleSizeRepository, ModelMapper mapper) {
+    public BicycleServiceImpl(BicycleRepository bicycleRepository,
+                              CategoryRepository categoryRepository,
+                              CategoryService categoryService,
+                              BicycleSizeRepository bicycleSizeRepository,
+                              ModelMapper mapper) {
         this.bicycleRepository = bicycleRepository;
         this.categoryRepository = categoryRepository;
         this.categoryService = categoryService;
@@ -39,6 +48,10 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public void addBicycle(BicycleServiceModel bicycleServiceModel) {
+        checkIfBicycleAlreadyExist(bicycleServiceModel.getMake(),
+                bicycleServiceModel.getModel(),
+                bicycleServiceModel.getColor());
+
         Bicycle bicycle = mapper
                 .map(bicycleServiceModel, Bicycle.class);
         Category category = mapper
@@ -62,22 +75,33 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public BicycleServiceModel findById(String id) {
-        Bicycle bicycle = getBicycleById(id);
+        Bicycle bicycle = this.getBicycleById(id);
 
         return this.getBicycleServiceModel(bicycle);
     }
 
     @Override
     public void editById(String id, BicycleServiceModel model) {
-        Bicycle bicycle = getBicycleById(id);
+        Bicycle bicycle = this.getBicycleById(id);
 
-        bicycle.setMake(model.getMake());
-        bicycle.setModel(model.getModel());
-        bicycle.setColor(model.getColor());
+        String editBicycleMake = model.getMake();
+        String editBicycleModel = model.getModel();
+        String editBicycleColor = model.getColor();
+
+        if(!bicycle.getMake().equals(editBicycleMake)
+                || !bicycle.getModel().equals(editBicycleModel)
+                || !bicycle.getColor().equals(editBicycleColor)){
+            this.checkIfBicycleAlreadyExist(editBicycleMake, editBicycleModel, editBicycleColor);
+        }
+
+        bicycle.setMake(editBicycleMake);
+        bicycle.setModel(editBicycleModel);
+        bicycle.setColor(editBicycleColor);
         bicycle.setPrice(model.getPrice());
         bicycle.setDescription(model.getDescription());
 
-        Category category = categoryRepository.findByName(model.getCategory());
+        Category category = categoryRepository.findByName(model.getCategory())
+                .orElseThrow(() -> new CategoryNotFoundException(INCORRECT_CATEGORY));
         bicycle.setCategory(category);
 
         Set<BicycleSize> sizes = bicycleSizeRepository.findAll()
@@ -91,7 +115,7 @@ public class BicycleServiceImpl implements BicycleService {
 
     @Override
     public void deleteBicycleById(String id) {
-        Bicycle bicycle = getBicycleById(id);
+        Bicycle bicycle = this.getBicycleById(id);
         bicycleRepository.delete(bicycle);
     }
 
@@ -119,8 +143,18 @@ public class BicycleServiceImpl implements BicycleService {
                 .collect(Collectors.toSet());
     }
 
-    private Bicycle getBicycleById(String id) {
+    private Bicycle getBicycleById(String id){
         return bicycleRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+                .orElseThrow(() -> new BicycleNotFoundException(INCORRECT_ID));
+    }
+
+
+    private void checkIfBicycleAlreadyExist(String make, String model, String color) {
+        Bicycle bicycle = bicycleRepository.findByMakeAndModelAndColor(make, model, color)
+                .orElse(null);
+
+        if (bicycle != null){
+            throw new BicycleAlreadyExistException(DUPLICATE_BICYCLE);
+        }
     }
 }

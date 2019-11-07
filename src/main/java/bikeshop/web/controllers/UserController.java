@@ -41,7 +41,8 @@ public class UserController extends BaseController{
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ModelAndView registerConfirm(@ModelAttribute UserRegisterBindingModel model, RedirectAttributes redirectAttributes){
+    public ModelAndView registerConfirm(@ModelAttribute UserRegisterBindingModel model,
+                                        RedirectAttributes redirectAttributes){
         if(this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
             this.setRedirectsOnRegisterForm(model, redirectAttributes);
             return redirect("/users/register");

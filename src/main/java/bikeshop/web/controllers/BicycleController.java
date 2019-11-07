@@ -7,6 +7,7 @@ import bikeshop.domain.models.service.ComponentServiceModel;
 import bikeshop.domain.models.view.BicycleByCategoryViewModel;
 import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.ComponentViewModel;
+import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
@@ -33,7 +34,10 @@ public class BicycleController extends BaseController {
     private final ComponentService componentService;
 
     @Autowired
-    public BicycleController(BicycleService bicycleService, ModelMapper mapper, CloudinaryService cloudinaryService, ComponentService componentService) {
+    public BicycleController(BicycleService bicycleService,
+                             ModelMapper mapper,
+                             CloudinaryService cloudinaryService,
+                             ComponentService componentService) {
         this.bicycleService = bicycleService;
         this.mapper = mapper;
         this.cloudinaryService = cloudinaryService;
@@ -48,7 +52,7 @@ public class BicycleController extends BaseController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView addBicycleConform(@ModelAttribute BicycleAddBindingModel model, RedirectAttributes redirectAttributes) throws IOException, IllegalAccessException {
+    public ModelAndView addBicycleConform(@ModelAttribute BicycleAddBindingModel model) throws IOException, IllegalAccessException {
         BicycleServiceModel serviceModel = mapper.map(model, BicycleServiceModel.class);
         serviceModel.setImageUrl(
                 this.cloudinaryService.uploadImage(model.getImage())
@@ -73,7 +77,8 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView bicycleDetails(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView bicycleDetails(@PathVariable String id,
+                                       ModelAndView modelAndView){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
         BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
         modelAndView.addObject("bicycle", bicycle);
@@ -83,7 +88,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView) {
+    public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
         BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
         modelAndView.addObject("bicycle", bicycle);
@@ -94,7 +99,7 @@ public class BicycleController extends BaseController {
     @PatchMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ModelAndView editConfirm(@PathVariable String id,
-                                    @ModelAttribute BicycleEditBindingModel model) {
+                                    @ModelAttribute BicycleEditBindingModel model){
         BicycleServiceModel serviceModel = mapper.map(model, BicycleServiceModel.class);
         bicycleService.editById(id, serviceModel);
         return redirect("/bicycles/all");
@@ -102,7 +107,7 @@ public class BicycleController extends BaseController {
 
     @PatchMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView delete(@PathVariable String id) {
+    public ModelAndView delete(@PathVariable String id){
         bicycleService.deleteBicycleById(id);
         return redirect("/bicycles/all");
     }

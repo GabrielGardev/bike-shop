@@ -3,6 +3,7 @@ package bikeshop.web.controllers;
 import bikeshop.domain.models.binding.OrderCreateBindingModel;
 import bikeshop.domain.models.service.OrderServiceModel;
 import bikeshop.domain.models.view.OrderViewModel;
+import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bikeshop.common.Constants.DATE_PATTERN;
 
 @Controller
 @RequestMapping("/orders")
@@ -35,7 +38,6 @@ public class OrderController extends BaseController {
                                      @ModelAttribute OrderCreateBindingModel model,
                                      ModelAndView modelAndView,
                                      Principal principal){
-
         OrderServiceModel serviceModel = mapper.map(model, OrderServiceModel.class);
         OrderServiceModel order = orderService.viewOrder(bicycleId, principal.getName(), serviceModel);
         OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
@@ -53,7 +55,7 @@ public class OrderController extends BaseController {
                                             Principal principal){
         orderService.createOrder(bicycleId, bicycleSize, quantity, totalPrice, principal.getName());
 
-        return view("order/user-orders");
+        return redirect("/orders/customer");
     }
 
     @GetMapping("/all")
@@ -80,7 +82,7 @@ public class OrderController extends BaseController {
         return serviceModels.stream()
                     .map(o -> {
                         OrderViewModel viewModel = mapper.map(o, OrderViewModel.class);
-                        viewModel.setDate(o.getFinishedOn().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                        viewModel.setDate(o.getFinishedOn().format(DateTimeFormatter.ofPattern(DATE_PATTERN)));
                         return viewModel;
                     })
                     .collect(Collectors.toList());

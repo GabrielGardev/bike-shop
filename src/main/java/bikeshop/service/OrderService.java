@@ -1,6 +1,7 @@
 package bikeshop.service;
 
 import bikeshop.domain.models.service.OrderServiceModel;
+import bikeshop.error.BicycleNotFoundException;
 
 import java.util.Collection;
 import java.util.List;

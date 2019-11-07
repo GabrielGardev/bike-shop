@@ -1,13 +1,15 @@
 package bikeshop.service.impl;
 
-import bikeshop.common.Constants;
 import bikeshop.domain.entities.Component;
 import bikeshop.domain.models.service.ComponentServiceModel;
+import bikeshop.error.ComponentNotFoundException;
 import bikeshop.repository.ComponentRepository;
 import bikeshop.service.ComponentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static bikeshop.common.Constants.INCORRECT_ID;
 
 @Service
 public class ComponentServiceImpl implements ComponentService {
@@ -25,19 +27,19 @@ public class ComponentServiceImpl implements ComponentService {
     public ComponentServiceModel saveComponent(ComponentServiceModel componentServiceModel) {
         String type = componentServiceModel.getType().trim();
         String description = componentServiceModel.getDescription().trim();
-        Component component1 = componentRepository.findByTypeAndDescription(type, description)
+        Component component = componentRepository.findByTypeAndDescription(type, description)
                 .orElse(null);
-        if (component1 != null){
-            return mapper.map(component1, ComponentServiceModel.class);
+        if (component != null){
+            return mapper.map(component, ComponentServiceModel.class);
         }
-        Component component = mapper.map(componentServiceModel, Component.class);
+        component = mapper.map(componentServiceModel, Component.class);
         return mapper.map(componentRepository.save(component), ComponentServiceModel.class);
     }
 
     @Override
     public void editById(String id, String description) {
         Component component = componentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+                .orElseThrow(() -> new ComponentNotFoundException(INCORRECT_ID));
         component.setDescription(description);
         componentRepository.save(component);
     }

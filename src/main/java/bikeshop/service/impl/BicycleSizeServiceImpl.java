@@ -1,8 +1,9 @@
 package bikeshop.service.impl;
 
-import bikeshop.common.Constants;
 import bikeshop.domain.entities.BicycleSize;
 import bikeshop.domain.models.service.BicycleSizeServiceModel;
+import bikeshop.error.BicycleSizeAlreadyExistException;
+import bikeshop.error.BicycleSizeNotFoundException;
 import bikeshop.repository.BicycleSizeRepository;
 import bikeshop.service.BicycleSizeService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bikeshop.common.Constants.DUPLICATE_BICYCLE_SIZE;
+import static bikeshop.common.Constants.INCORRECT_ID;
 
 @Service
 public class BicycleSizeServiceImpl implements BicycleSizeService {
@@ -26,6 +30,7 @@ public class BicycleSizeServiceImpl implements BicycleSizeService {
 
     @Override
     public void addSize(BicycleSizeServiceModel bicycleSizeServiceModel) {
+        this.checkIfSizeAlreadyExist(bicycleSizeServiceModel.getName());
         BicycleSize bicycleSize = mapper.map(bicycleSizeServiceModel, BicycleSize.class);
         bicycleSizeRepository.saveAndFlush(bicycleSize);
     }
@@ -46,6 +51,15 @@ public class BicycleSizeServiceImpl implements BicycleSizeService {
 
     private BicycleSize getBicycleSize(String id) {
         return bicycleSizeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+                .orElseThrow(() -> new BicycleSizeNotFoundException(INCORRECT_ID));
+    }
+
+
+    private void checkIfSizeAlreadyExist(String name) {
+        BicycleSize bicycleSize = bicycleSizeRepository.findByName(name).orElse(null);
+
+        if (bicycleSize != null){
+            throw new BicycleSizeAlreadyExistException(DUPLICATE_BICYCLE_SIZE);
+        }
     }
 }

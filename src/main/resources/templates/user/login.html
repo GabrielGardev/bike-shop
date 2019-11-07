@@ -29,7 +29,11 @@
                                         <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
                                         <label for="inputPassword">Password</label>
                                     </div>
-
+                                    <th:block th:if="${param.error}">
+                                        <div class="text-center">
+                                            <p style="color: red">Incorrect Username or Password</p>
+                                        </div>
+                                    </th:block>
                                     <button class="btn btn-lg btn-dark btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit">Login</button>
                                 </form>
                             </div>

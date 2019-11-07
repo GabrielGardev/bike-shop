@@ -3,6 +3,8 @@ package bikeshop.service.impl;
 import bikeshop.common.Constants;
 import bikeshop.domain.entities.Category;
 import bikeshop.domain.models.service.CategoryServiceModel;
+import bikeshop.error.CategoryAlreadyExistException;
+import bikeshop.error.CategoryNotFoundException;
 import bikeshop.repository.CategoryRepository;
 import bikeshop.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static bikeshop.common.Constants.DUPLICATE_CATEGORY;
+import static bikeshop.common.Constants.INCORRECT_ID;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -26,8 +31,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void addCategory(CategoryServiceModel categoryServiceModel) {
+        this.checkIfCategoryAlreadyExist(categoryServiceModel.getName());
+
         Category category = mapper.map(categoryServiceModel, Category.class);
-        categoryRepository.saveAndFlush(category);
+        categoryRepository.save(category);
     }
 
     @Override
@@ -41,14 +48,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryServiceModel findById(String id) {
         Category category = this.getCategory(id);
-
         return mapper.map(category, CategoryServiceModel.class);
     }
 
     @Override
     public void editCategory(String id, CategoryServiceModel categoryServiceModel) {
+        String name = categoryServiceModel.getName();
+        this.checkIfCategoryAlreadyExist(name);
+
         Category category = this.getCategory(id);
-        category.setName(categoryServiceModel.getName());
+        category.setName(name);
         categoryRepository.save(category);
     }
 
@@ -60,6 +69,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     private Category getCategory(String id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.INCORRECT_ID));
+                .orElseThrow(() -> new CategoryNotFoundException(INCORRECT_ID));
+    }
+
+
+    private void checkIfCategoryAlreadyExist(String name) {
+        Category category = categoryRepository.findByName(name).orElse(null);
+
+        if (category != null){
+            throw new CategoryAlreadyExistException(DUPLICATE_CATEGORY);
+        }
     }
 }

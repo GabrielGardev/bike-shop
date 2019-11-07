@@ -19,16 +19,4 @@ public class HomeController extends BaseController {
     public ModelAndView home(){
         return view("home");
     }
-
-//    @GetMapping("/**")
-//    @PreAuthorize("isAuthenticated()")
-//    public ModelAndView categoriesInNavBar(ModelAndView modelAndView){
-//        List<CategoryViewModel> categories = categoryService.findAllCategories()
-//                .stream()
-//                .map(c -> mapper.map(c, CategoryViewModel.class))
-//                .collect(Collectors.toList());
-//
-//        modelAndView.addObject("categories", categories);
-//        return modelAndView;
-//    }
 }

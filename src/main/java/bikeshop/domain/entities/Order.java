@@ -35,7 +35,7 @@ public class Order extends BaseEntity {
         this.user = user;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "size_id", referencedColumnName = "id")
     public BicycleSize getBicycleSize() {
         return bicycleSize;
