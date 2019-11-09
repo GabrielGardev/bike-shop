@@ -11,6 +11,7 @@ import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
+import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -46,6 +47,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Add Bicycle")
     public ModelAndView addBicycle() {
         return view("bicycle/add-bicycle");
     }
@@ -65,6 +67,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("All Bicycle")
     public ModelAndView allBicycles(ModelAndView modelAndView) {
         List<BicycleViewModel> bicycles = bicycleService.findAll()
                 .stream()
@@ -77,6 +80,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/details/{id}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Bicycle Details")
     public ModelAndView bicycleDetails(@PathVariable String id,
                                        ModelAndView modelAndView){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
@@ -88,6 +92,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Edit Bicycle")
     public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
         BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
@@ -114,6 +119,7 @@ public class BicycleController extends BaseController {
 
     @GetMapping("/{name}")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Bicycle {name}")
     public ModelAndView getBicyclesByCategoryId(@PathVariable String name, ModelAndView modelAndView) {
         List<BicycleByCategoryViewModel> allByCategoryId = bicycleService.findAllByCategory(name)
                 .stream()

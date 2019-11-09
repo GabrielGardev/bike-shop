@@ -7,6 +7,7 @@ import bikeshop.domain.models.service.UserServiceModel;
 import bikeshop.domain.models.view.UserAllViewModel;
 import bikeshop.domain.models.view.UserProfileViewModel;
 import bikeshop.service.UserService;
+import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +36,7 @@ public class UserController extends BaseController{
 
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("Register User ")
     public ModelAndView register(){
         return view("user/register");
     }
@@ -55,12 +57,14 @@ public class UserController extends BaseController{
 
     @GetMapping("/login")
     @PreAuthorize("isAnonymous()")
+    @PageTitle("Login User")
     public ModelAndView login(){
         return view("user/login");
     }
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Profile")
     public ModelAndView profile(Principal principal, ModelAndView modelAndView){
         UserServiceModel user = userService.findUserByUsername(principal.getName());
         UserProfileViewModel model = mapper.map(user, UserProfileViewModel.class);
@@ -71,6 +75,7 @@ public class UserController extends BaseController{
 
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("Edit User")
     public ModelAndView editProfile(Principal principal, ModelAndView modelAndView){
         UserServiceModel user = userService.findUserByUsername(principal.getName());
         UserProfileViewModel model = mapper.map(user, UserProfileViewModel.class);
@@ -94,6 +99,7 @@ public class UserController extends BaseController{
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PageTitle("All Users")
     public ModelAndView allUsers(ModelAndView modelAndView){
         List<UserAllViewModel> users = userService.findAll()
                 .stream()

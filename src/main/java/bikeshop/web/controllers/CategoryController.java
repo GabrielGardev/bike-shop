@@ -4,6 +4,7 @@ import bikeshop.domain.models.binding.CategoryBindingModel;
 import bikeshop.domain.models.service.CategoryServiceModel;
 import bikeshop.domain.models.view.CategoryViewModel;
 import bikeshop.service.CategoryService;
+import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Add Category")
     public ModelAndView addCategory(){
         return view("category/add-category");
     }
@@ -43,6 +45,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("All Categories")
     public ModelAndView allCategories(ModelAndView modelAndView){
         List<CategoryViewModel> categories = categoryService.findAllCategories()
                 .stream()
@@ -55,6 +58,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Edit Category")
     public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView){
         CategoryServiceModel categoryServiceById = categoryService.findById(id);
         CategoryViewModel categoryViewModel = mapper.map(categoryServiceById, CategoryViewModel.class);
@@ -74,6 +78,7 @@ public class CategoryController extends BaseController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Delete Category")
     public ModelAndView deleteCategory(@PathVariable String id, ModelAndView modelAndView){
         CategoryServiceModel categoryServiceById = categoryService.findById(id);
         CategoryViewModel categoryViewModel = mapper.map(categoryServiceById, CategoryViewModel.class);

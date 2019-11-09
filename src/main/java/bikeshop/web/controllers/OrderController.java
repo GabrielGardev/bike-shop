@@ -5,6 +5,7 @@ import bikeshop.domain.models.service.OrderServiceModel;
 import bikeshop.domain.models.view.OrderViewModel;
 import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.OrderService;
+import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -60,6 +61,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PageTitle("All Orders")
     public ModelAndView getAllOrders(ModelAndView modelAndView){
         List<OrderServiceModel> serviceModels = orderService.findAllOrders();
         List<OrderViewModel> viewModels = this.getOrderViewModels(serviceModels);
@@ -70,6 +72,7 @@ public class OrderController extends BaseController {
 
     @GetMapping("/customer")
     @PreAuthorize("isAuthenticated()")
+    @PageTitle("My Orders")
     public ModelAndView getCustomerOrders(ModelAndView modelAndView, Principal principal){
         List<OrderServiceModel> serviceModels = orderService.findByCustomerName(principal.getName());
         List<OrderViewModel> viewModels = this.getOrderViewModels(serviceModels);

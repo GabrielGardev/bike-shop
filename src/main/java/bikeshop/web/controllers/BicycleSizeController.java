@@ -4,6 +4,7 @@ import bikeshop.domain.models.binding.BicycleSizeBindingModel;
 import bikeshop.domain.models.service.BicycleSizeServiceModel;
 import bikeshop.domain.models.view.BicycleSizeViewModel;
 import bikeshop.service.BicycleSizeService;
+import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,7 @@ public class BicycleSizeController extends BaseController{
 
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("Add Bicycle Size")
     public ModelAndView addBicycleSize(){
         return view("bicycle/size/add-size");
     }
@@ -43,6 +45,7 @@ public class BicycleSizeController extends BaseController{
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    @PageTitle("All Bicycle Size")
     public ModelAndView allBicycleSizes(ModelAndView modelAndView){
         List<BicycleSizeViewModel> sizes = bicycleSizeService.findAllBicycleSizes()
                 .stream()
