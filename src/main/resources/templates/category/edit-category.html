@@ -14,15 +14,14 @@
         <div class="container w-25">
             <h1 class="text-center text-dark">Edit Category</h1>
             <hr class="hr-2 bg-dark">
-            <form class="form mx-auto" th:action="@{/categories/edit/{id}(id=*{id})}" th:method="post"
-                  th:object="${model}">
-                <div class="form-group">
+            <form class="form mx-auto" th:action="@{/categories/edit/{id}(id=*{id})}" th:method="post" th:object="${model}">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'text-danger'">
                     <label for="edit-category-name" class="font-weight-bold">Name</label>
-                    <input type="text" class="form-control" id="edit-category-name" name="name" th:value="*{name}">
-                    <th:block th:if="${#fields.hasErrors('name')}">
-                        <small th:errors="*{name}" class="error"></small>
-                    </th:block>
+                    <input type="text" class="form-control" id="edit-category-name" name="name" th:field="*{name}">
+                    <small th:each="error : ${#fields.errors('name')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
+
                 <hr class="hr-2 bg-dark">
                 <div class="button-holder d-flex justify-content-center">
                     <button type="submit" class="btn btn-info">Edit Category</button>

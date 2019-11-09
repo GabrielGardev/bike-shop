@@ -8,10 +8,13 @@ import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,13 +34,18 @@ public class BicycleSizeController extends BaseController{
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     @PageTitle("Add Bicycle Size")
-    public ModelAndView addBicycleSize(){
+    public ModelAndView addBicycleSize(@ModelAttribute(name = "model") BicycleSizeBindingModel model){
         return view("bicycle/size/add-size");
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView addBicycleSizeConfirm(@ModelAttribute BicycleSizeBindingModel model){
+    public ModelAndView addBicycleSizeConfirm(@Valid @ModelAttribute(name = "model") BicycleSizeBindingModel model,
+                                              BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return view("bicycle/size/add-size");
+        }
+
         BicycleSizeServiceModel serviceModel = mapper.map(model, BicycleSizeServiceModel.class);
         bicycleSizeService.addSize(serviceModel);
         return redirect("/sizes/all");
@@ -54,6 +62,13 @@ public class BicycleSizeController extends BaseController{
         modelAndView.addObject("sizes", sizes);
 
         return view("bicycle/size/all-sizes", modelAndView);
+    }
+
+    @PatchMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_MODERATOR')")
+    public ModelAndView delete(@PathVariable String id){
+        bicycleSizeService.deleteBicycleById(id);
+        return redirect("/sizes/all");
     }
 
     @GetMapping("/fetch")

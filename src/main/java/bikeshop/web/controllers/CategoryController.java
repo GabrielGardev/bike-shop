@@ -9,9 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,13 +33,18 @@ public class CategoryController extends BaseController {
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     @PageTitle("Add Category")
-    public ModelAndView addCategory(){
+    public ModelAndView addCategory(@ModelAttribute(name = "model") CategoryBindingModel model){
         return view("category/add-category");
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView addCategoryConfirm(@ModelAttribute CategoryBindingModel model){
+    public ModelAndView addCategoryConfirm(@Valid @ModelAttribute(name = "model") CategoryBindingModel model,
+                                           BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return view("category/add-category");
+        }
+
         CategoryServiceModel serviceModel = mapper.map(model, CategoryServiceModel.class);
         categoryService.addCategory(serviceModel);
         return redirect("/categories/all");
@@ -61,15 +68,21 @@ public class CategoryController extends BaseController {
     @PageTitle("Edit Category")
     public ModelAndView editCategory(@PathVariable String id, ModelAndView modelAndView){
         CategoryServiceModel categoryServiceById = categoryService.findById(id);
-        CategoryViewModel categoryViewModel = mapper.map(categoryServiceById, CategoryViewModel.class);
+        CategoryBindingModel model = mapper.map(categoryServiceById, CategoryBindingModel.class);
 
-        modelAndView.addObject("model", categoryViewModel);
+        modelAndView.addObject("model", model);
         return view("category/edit-category", modelAndView);
     }
 
     @PostMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView editCategoryConfirm(@PathVariable String id, @ModelAttribute CategoryBindingModel model){
+    public ModelAndView editCategoryConfirm(@PathVariable String id,
+                                            @Valid @ModelAttribute(name = "model") CategoryBindingModel model,
+                                            BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return view("category/edit-category");
+        }
+
         CategoryServiceModel serviceModel = mapper.map(model, CategoryServiceModel.class);
         categoryService.editCategory(id, serviceModel);
 

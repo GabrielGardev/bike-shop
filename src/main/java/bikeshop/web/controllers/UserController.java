@@ -12,10 +12,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
@@ -37,17 +40,19 @@ public class UserController extends BaseController{
     @GetMapping("/register")
     @PreAuthorize("isAnonymous()")
     @PageTitle("Register User ")
-    public ModelAndView register(){
+    public ModelAndView register(@ModelAttribute(name = "model") UserRegisterBindingModel model){
         return view("user/register");
     }
 
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ModelAndView registerConfirm(@ModelAttribute UserRegisterBindingModel model,
-                                        RedirectAttributes redirectAttributes){
+    public ModelAndView registerConfirm(@Valid @ModelAttribute(name = "model") UserRegisterBindingModel model,
+                                        BindingResult bindingResult){
         if(this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
-            this.setRedirectsOnRegisterForm(model, redirectAttributes);
-            return redirect("/users/register");
+            bindingResult.addError(new FieldError("model", "password", "Passwords don't match."));
+        }
+        if (bindingResult.hasErrors()) {
+            return view("user/register");
         }
         UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
         userService.registerUser(serviceModel);
@@ -76,9 +81,10 @@ public class UserController extends BaseController{
     @GetMapping("/edit")
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Edit User")
-    public ModelAndView editProfile(Principal principal, ModelAndView modelAndView){
+    public ModelAndView editProfile(Principal principal,
+                                    ModelAndView modelAndView){
         UserServiceModel user = userService.findUserByUsername(principal.getName());
-        UserProfileViewModel model = mapper.map(user, UserProfileViewModel.class);
+        UserEditBindingModel model = mapper.map(user, UserEditBindingModel.class);
         modelAndView.addObject("model", model);
 
         return view("user/edit-profile", modelAndView);
@@ -86,9 +92,13 @@ public class UserController extends BaseController{
 
     @PatchMapping("/edit")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView editProfileConfirm(@ModelAttribute UserEditBindingModel model, ModelAndView modelAndView){
-        if (this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
-            return redirect("/users/edit");
+    public ModelAndView editProfileConfirm(@Valid @ModelAttribute(name = "model") UserEditBindingModel model,
+                                           BindingResult bindingResult){
+        if(this.passwordsNotMatch(model.getPassword(), model.getConfirmPassword())){
+            bindingResult.addError(new FieldError("model", "password", "Passwords don't match."));
+        }
+        if (bindingResult.hasErrors()) {
+            return view("user/edit-profile");
         }
 
         UserServiceModel serviceModel = mapper.map(model, UserServiceModel.class);
@@ -148,12 +158,5 @@ public class UserController extends BaseController{
 
     private boolean passwordsNotMatch(String password, String confirmPassword) {
         return !password.equals(confirmPassword);
-    }
-
-    private void setRedirectsOnRegisterForm(UserRegisterBindingModel model, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("username", model.getUsername());
-        redirectAttributes.addFlashAttribute("firstName", model.getFirstName());
-        redirectAttributes.addFlashAttribute("lastName", model.getLastName());
-        redirectAttributes.addFlashAttribute("email", model.getEmail());
     }
 }

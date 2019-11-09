@@ -16,65 +16,66 @@
 
             <form class="form w-auto mx-auto" th:action="@{/users/edit}" th:method="patch" th:object="${model}">
                 <hr class="hr-2 bg-dark">
+
                 <div class="form-group row">
                     <label for="username" class="col-sm-4 col-form-label font-weight-bold">Username:</label>
                     <div class="col-sm-8">
-                        <input type="text" th:value="*{username}" class="form-control" name="username" id="username"
+                        <input type="text" th:field="*{username}" class="form-control" name="username" id="username"
                                readonly>
                     </div>
                 </div>
-                <div class="form-group row">
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'">
                     <label for="firstName" class="col-sm-4 col-form-label font-weight-bold">First Name:</label>
                     <div class="col-sm-8">
-                        <input type="text" th:value="*{firstName}" class="form-control" name="firstName" id="firstName">
+                        <input type="text" th:field="*{firstName}" class="form-control" name="firstName" id="firstName">
+                        <small th:each="error : ${#fields.errors('firstName')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
                 </div>
-                <div class="form-group row">
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('lastName')}? 'text-danger'">
                     <label for="lastName" class="col-sm-4 col-form-label font-weight-bold">Last Name:</label>
                     <div class="col-sm-8">
-                        <input type="text" th:value="*{lastName}" class="form-control" name="lastName" id="lastName">
+                        <input type="text" th:field="*{lastName}" class="form-control" name="lastName" id="lastName">
+                        <small th:each="error : ${#fields.errors('lastName')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
                 </div>
-                <div class="form-group row">
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('oldPassword')}? 'text-danger'">
                     <label for="oldPassword" class="col-sm-4 col-form-label font-weight-bold">Old Password</label>
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="oldPassword" placeholder="Password..."
+                        <input type="password" th:field="*{oldPassword}" class="form-control" id="oldPassword" placeholder="Password..."
                                name="oldPassword" required>
+                        <small th:each="error : ${#fields.errors('oldPassword')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
-                    <!--                    <th:block th:if="${#fields.hasErrors('oldPassword')}">-->
-                    <!--                        <small th:errors="*{oldPassword}" class="error"></small>-->
-                    <!--                    </th:block>-->
                 </div>
-                <div class="form-group row">
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('password')}? 'text-danger'">
                     <label for="password" class="col-sm-4 col-form-label font-weight-bold">New Password</label>
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="password" placeholder="New Password..."
+                        <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="New Password..."
                                name="password">
+                        <small th:each="error : ${#fields.errors('password')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
-                    <!--                    <th:block th:if="${#fields.hasErrors('password')}">-->
-                    <!--                        <small th:errors="*{password}" class="error"></small>-->
-                    <!--                    </th:block>-->
                 </div>
-                <div class="form-group row">
-                    <label for="confirmPassword" class="col-sm-4 col-form-label font-weight-bold">Confirm New
-                        Password</label>
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('confirmPassword')}? 'text-danger'">
+                    <label for="confirmPassword" class="col-sm-4 col-form-label font-weight-bold">Confirm New Password</label>
                     <div class="col-sm-8">
-                        <input type="password" class="form-control" id="confirmPassword"
+                        <input type="password" th:field="*{confirmPassword}" class="form-control" id="confirmPassword"
                                placeholder="Confirm New Password..." name="confirmPassword">
+                        <small th:each="error : ${#fields.errors('confirmPassword')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
-                    <!--                    <th:block th:if="${#fields.hasErrors('password')}">-->
-                    <!--                        <small th:errors="*{password}" class="error"></small>-->
-                    <!--                    </th:block>-->
                 </div>
-                <div class="form-group row">
+
+                <div class="form-group row" th:classappend="${#fields.hasErrors('email')}? 'text-danger'">
                     <label for="email" class="col-sm-4 col-form-label font-weight-bold">Email</label>
                     <div class="col-sm-8">
-                        <input th:value="*{email}" type="email" class="form-control" id="email" name="email">
+                        <input th:field="*{email}" type="email" class="form-control" id="email" name="email">
+                        <small th:each="error : ${#fields.errors('email')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                     </div>
-                    <!--                    <th:block th:if="${#fields.hasErrors('email')}">-->
-                    <!--                        <small th:errors="*{email}" class="error"></small>-->
-                    <!--                    </th:block>-->
                 </div>
+
                 <hr class="hr-2 bg-dark">
                 <div class="button-holder d-flex justify-content-center">
                     <button type="submit" class="btn btn-success">Edit</button>

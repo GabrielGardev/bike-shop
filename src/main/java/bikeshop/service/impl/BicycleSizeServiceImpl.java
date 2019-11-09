@@ -49,6 +49,12 @@ public class BicycleSizeServiceImpl implements BicycleSizeService {
         return mapper.map(bicycleSize, BicycleSizeServiceModel.class);
     }
 
+    @Override
+    public void deleteBicycleById(String id) {
+        BicycleSize bicycleSize = this.getBicycleSize(id);
+        bicycleSizeRepository.delete(bicycleSize);
+    }
+
     private BicycleSize getBicycleSize(String id) {
         return bicycleSizeRepository.findById(id)
                 .orElseThrow(() -> new BicycleSizeNotFoundException(INCORRECT_ID));

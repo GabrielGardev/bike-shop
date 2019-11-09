@@ -12,31 +12,43 @@
 <main class="m-3">
     <h1 class="text-center text-dark">Register</h1>
     <hr class="hr-2 bg-dark w-25">
-    <form class="form w-25 mx-auto" th:action="@{/users/register}" th:method="post">
+    <form class="form w-25 mx-auto" th:action="@{/users/register}" th:method="post" th:object="${model}">
 
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('username')}? 'text-danger'">
             <label for="username" class="font-weight-bold">Username</label>
-            <input required type="text" class="form-control" id="username" placeholder="Username..." name="username" th:value="*{username}">
+            <input required type="text" class="form-control" id="username"
+                   placeholder="Username..." name="username" th:field="*{username}">
+            <small th:each="error : ${#fields.errors('username')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('firstName')}? 'text-danger'">
             <label for="firstName" class="font-weight-bold">First Name</label>
-            <input required type="text" class="form-control" id="firstName" placeholder="First Name..." name="firstName" th:value="*{firstName}">
+            <input required type="text" class="form-control" id="firstName"
+                   placeholder="First Name..." name="firstName" th:field="*{firstName}">
+            <small th:each="error : ${#fields.errors('firstName')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('lastName')}? 'text-danger'">
             <label for="lastName" class="font-weight-bold">Last Name</label>
-            <input required type="text" class="form-control" id="lastName" placeholder="Last Name..." name="lastName" th:value="*{lastName}">
+            <input required type="text" class="form-control" id="lastName"
+                   placeholder="Last Name..." name="lastName" th:field="*{lastName}">
+            <small th:each="error : ${#fields.errors('lastName')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('password')}? 'text-danger'">
             <label for="password" class="font-weight-bold">Password</label>
-            <input required type="password" class="form-control" id="password" placeholder="Password..." name="password" th:value="*{password}">
+            <input required type="password" class="form-control" id="password"
+                   placeholder="Password..." name="password" th:field="*{password}">
+            <small th:each="error : ${#fields.errors('password')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('confirmPassword')}? 'text-danger'">
             <label for="confirmPassword" class="font-weight-bold">Confirm Password</label>
-            <input required type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password..." name="confirmPassword" th:value="*{confirmPassword}">
+            <input required type="password" class="form-control" id="confirmPassword"
+                   placeholder="Confirm Password..." name="confirmPassword" th:field="*{confirmPassword}">
+            <small th:each="error : ${#fields.errors('confirmPassword')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
-        <div class="form-group">
+        <div class="form-group" th:classappend="${#fields.hasErrors('email')}? 'text-danger'">
             <label for="email" class="font-weight-bold">Email</label>
-            <input required type="email" class="form-control" id="email" placeholder="Email..." name="email" th:value="*{email}">
+            <input required type="email" class="form-control" id="email"
+                   placeholder="Email..." name="email" th:field="*{email}">
+            <small th:each="error : ${#fields.errors('email')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
         </div>
         <hr class="hr-2 bg-dark">
         <div class="button-holder d-flex justify-content-center">
@@ -44,7 +56,7 @@
         </div>
     </form>
 </main>
-<div class="fixed-bottom">
+<div>
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>

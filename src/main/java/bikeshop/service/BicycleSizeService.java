@@ -11,4 +11,6 @@ public interface BicycleSizeService {
     List<BicycleSizeServiceModel> findAllBicycleSizes();
 
     BicycleSizeServiceModel findById(String id);
+
+    void deleteBicycleById(String id);
 }
