@@ -58,4 +58,49 @@ public final class Constants {
     public static final String INVALID_BICYCLE_SIZE_CAPITAL_CASE_MESSAGE = "Bicycle size must be only with capital letters.";
     public static final String NULL_BICYCLE_SIZE_MESSAGE = "Bicycle size cannot be null.";
     public static final String EMPTY_BICYCLE_SIZE_MESSAGE = "Bicycle size cannot be empty.";
+
+    public static final String NULL_BICYCLE_MAKE_MESSAGE = "Make cannot be null.";
+    public static final String EMPTY_BICYCLE_MAKE_MESSAGE = "Make cannot be empty.";
+
+    public static final String NULL_BICYCLE_MODEL_MESSAGE = "Model cannot be null.";
+    public static final String EMPTY_BICYCLE_MODEL_MESSAGE = "Model cannot be empty.";
+
+    public static final String NULL_BICYCLE_DESCRIPTION_MESSAGE = "Description cannot be null.";
+    public static final String EMPTY_BICYCLE_DESCRIPTION_MESSAGE = "Description cannot be empty.";
+
+    public static final String NULL_BICYCLE_COLOR_MESSAGE = "Color cannot be null.";
+    public static final String EMPTY_BICYCLE_COLOR_MESSAGE = "Color cannot be empty.";
+
+    public static final String NULL_BICYCLE_PRICE_MESSAGE = "Price cannot be null.";
+    public static final String MIN_BICYCLE_PRICE_MESSAGE = "The value must be positive.";
+
+    public static final String NULL_BICYCLE_IMAGE_MESSAGE = "Image cannot be null.";
+
+    public static final String INVALID_BICYCLE_FRAME_LENGTH_MESSAGE = "Bicycle frame description must be between 1 and 255 characters long.";
+    public static final String NULL_BICYCLE_FRAME_MESSAGE = "Frame cannot be null.";
+    public static final String EMPTY_BICYCLE_FRAME_MESSAGE = "Frame cannot be empty.";
+
+    public static final String INVALID_BICYCLE_FORK_LENGTH_MESSAGE = "Bicycle fork description must be between 1 and 255 characters long.";
+    public static final String NULL_BICYCLE_FORK_MESSAGE = "Fork cannot be null.";
+    public static final String EMPTY_BICYCLE_FORK_MESSAGE = "Fork cannot be empty.";
+
+    public static final String INVALID_BICYCLE_BREAKS_LENGTH_MESSAGE = "Bicycle breaks description must be between 1 and 255 characters long.";
+    public static final String NULL_BICYCLE_BREAKS_MESSAGE = "Breaks cannot be null.";
+    public static final String EMPTY_BICYCLE_BREAKS_MESSAGE = "Breaks cannot be empty.";
+
+    public static final String INVALID_BICYCLE_SEAT_LENGTH_MESSAGE = "Bicycle seat description must be between 1 and 255 characters long.";
+    public static final String NULL_BICYCLE_SEAT_MESSAGE = "Seat cannot be null.";
+    public static final String EMPTY_BICYCLE_SEAT_MESSAGE = "Seat cannot be empty.";
+
+    public static final String INVALID_BICYCLE_TYRES_LENGTH_MESSAGE = "Bicycle tyres description must be between 1 and 255 characters long.";
+    public static final String NULL_BICYCLE_TYRES_MESSAGE = "Tyres cannot be null.";
+    public static final String EMPTY_BICYCLE_TYRES_MESSAGE = "Tyres cannot be empty.";
+
+    public static final String INVALID_COMPONENT_LENGTH_MESSAGE = "Component description must be between 1 and 255 characters long.";
+    public static final String NULL_COMPONENT_MESSAGE = "Component cannot be null.";
+    public static final String EMPTY_COMPONENT_MESSAGE = "Component cannot be empty.";
+
+    public static final String NULL_ORDER_QUANTITY_MESSAGE = "Quantity cannot be null.";
+    public static final String MIN_ORDER_QUANTITY_MESSAGE = "The quantity must be at least 1.";
+    public static final String MAX_ORDER_QUANTITY_MESSAGE = "The quantity must be maximum 100.";
 }

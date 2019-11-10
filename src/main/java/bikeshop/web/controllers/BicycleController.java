@@ -2,24 +2,29 @@ package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.BicycleAddBindingModel;
 import bikeshop.domain.models.binding.BicycleEditBindingModel;
+import bikeshop.domain.models.binding.OrderCreateBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.domain.models.service.ComponentServiceModel;
 import bikeshop.domain.models.view.BicycleByCategoryViewModel;
 import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.ComponentViewModel;
+import bikeshop.domain.models.view.ComponentsViewModel;
 import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
 import bikeshop.web.annotations.PageTitle;
+import org.hibernate.boot.jaxb.spi.Binding;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -48,13 +53,18 @@ public class BicycleController extends BaseController {
     @GetMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     @PageTitle("Add Bicycle")
-    public ModelAndView addBicycle() {
+    public ModelAndView addBicycle(@ModelAttribute(name = "model") BicycleAddBindingModel model) {
         return view("bicycle/add-bicycle");
     }
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
-    public ModelAndView addBicycleConform(@ModelAttribute BicycleAddBindingModel model) throws IOException, IllegalAccessException {
+    public ModelAndView addBicycleConform(@Valid @ModelAttribute(name = "model") BicycleAddBindingModel model,
+                                          BindingResult bindingResult) throws IOException, IllegalAccessException {
+        if (bindingResult.hasErrors()){
+            return view("bicycle/add-bicycle");
+        }
+
         BicycleServiceModel serviceModel = mapper.map(model, BicycleServiceModel.class);
         serviceModel.setImageUrl(
                 this.cloudinaryService.uploadImage(model.getImage())
@@ -82,9 +92,11 @@ public class BicycleController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Bicycle Details")
     public ModelAndView bicycleDetails(@PathVariable String id,
-                                       ModelAndView modelAndView){
+                                       ModelAndView modelAndView,
+                                       @ModelAttribute(name = "orderModel") OrderCreateBindingModel orderModel){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
         BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
+
         modelAndView.addObject("bicycle", bicycle);
 
         return view("bicycle/details", modelAndView);
@@ -95,8 +107,11 @@ public class BicycleController extends BaseController {
     @PageTitle("Edit Bicycle")
     public ModelAndView edit(@PathVariable String id, ModelAndView modelAndView){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
-        BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
-        modelAndView.addObject("bicycle", bicycle);
+        ComponentsViewModel componentsModel = mapper.map(serviceModel, ComponentsViewModel.class);
+        BicycleEditBindingModel editModel = mapper.map(serviceModel, BicycleEditBindingModel.class);
+
+        modelAndView.addObject("componentsModel", componentsModel);
+        modelAndView.addObject("editModel", editModel);
 
         return view("bicycle/edit-bicycle", modelAndView);
     }
@@ -104,8 +119,17 @@ public class BicycleController extends BaseController {
     @PatchMapping("/edit/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ModelAndView editConfirm(@PathVariable String id,
-                                    @ModelAttribute BicycleEditBindingModel model){
-        BicycleServiceModel serviceModel = mapper.map(model, BicycleServiceModel.class);
+                                    @Valid @ModelAttribute(name = "editModel") BicycleEditBindingModel editModel,
+                                    BindingResult bindingResult,
+                                    ModelAndView modelAndView){
+        if (bindingResult.hasErrors()){
+            BicycleServiceModel serviceModel = bicycleService.findById(id);
+            ComponentsViewModel componentsModel = mapper.map(serviceModel, ComponentsViewModel.class);
+            modelAndView.addObject("componentsModel", componentsModel);
+
+            return view("bicycle/edit-bicycle", modelAndView);
+        }
+        BicycleServiceModel serviceModel = mapper.map(editModel, BicycleServiceModel.class);
         bicycleService.editById(id, serviceModel);
         return redirect("/bicycles/all");
     }

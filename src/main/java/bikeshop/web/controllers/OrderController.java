@@ -10,9 +10,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,11 +37,16 @@ public class OrderController extends BaseController {
 
     @PostMapping("/order-details/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView orderBicycle(@PathVariable(name = "id") String bicycleId,
-                                     @ModelAttribute OrderCreateBindingModel model,
+    public ModelAndView orderBicycleConfirm(@Valid @ModelAttribute(name = "orderModel") OrderCreateBindingModel orderModel,
+                                     @PathVariable(name = "id") String bicycleId,
                                      ModelAndView modelAndView,
-                                     Principal principal){
-        OrderServiceModel serviceModel = mapper.map(model, OrderServiceModel.class);
+                                     Principal principal,
+                                     BindingResult bindingResult){
+        if (bindingResult.hasErrors()){
+            return view("bicycle/details");
+        }
+
+        OrderServiceModel serviceModel = mapper.map(orderModel, OrderServiceModel.class);
         OrderServiceModel order = orderService.viewOrder(bicycleId, principal.getName(), serviceModel);
         OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
 

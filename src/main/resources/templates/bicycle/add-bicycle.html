@@ -12,66 +12,105 @@
 <main>
     <div class="jumbotron">
         <div class="container w-75">
-            <h1 class="text-center text-dark">Add Product</h1>
+            <h1 class="text-center text-dark">Add Bicycle</h1>
             <hr class="hr-2 bg-dark">
             <form id="add-product-form" class="form mx-auto" th:action="@{/bicycles/add}" th:method="post"
-                  enctype="multipart/form-data">
-                <div class="form-group">
+                  enctype="multipart/form-data" th:object="${model}">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('make')}? 'text-danger'">
                     <label for="add-bicycle-make" class="font-weight-bold">Make</label>
-                    <input required type="text" class="form-control" id="add-bicycle-make" name="make">
+                    <input required type="text" class="form-control" id="add-bicycle-make"
+                           name="make" th:field="*{make}">
+                    <small th:each="error : ${#fields.errors('make')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('model')}? 'text-danger'">
                     <label for="add-bicycle-model" class="font-weight-bold">Model</label>
-                    <input required type="text" class="form-control" id="add-bicycle-model" name="model">
+                    <input required type="text" class="form-control" id="add-bicycle-model"
+                           name="model" th:field="*{model}">
+                    <small th:each="error : ${#fields.errors('model')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('description')}? 'text-danger'">
                     <label for="add-bicycle-description" class="font-weight-bold">Description</label>
-                    <textarea required name="description" id="add-bicycle-description" class="form-control" rows="5"></textarea>
+                    <textarea required name="description" id="add-bicycle-description"
+                              class="form-control" rows="5" th:field="*{description}"></textarea>
+                    <small th:each="error : ${#fields.errors('description')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('color')}? 'text-danger'">
                     <label for="add-bicycle-color" class="font-weight-bold">Color</label>
-                    <input required type="text" class="form-control" id="add-bicycle-color" name="color">
+                    <input required type="text" class="form-control" id="add-bicycle-color"
+                           name="color" th:field="*{color}">
+                    <small th:each="error : ${#fields.errors('color')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('frame')}? 'text-danger'">
                     <label for="add-bicycle-frame" class="font-weight-bold">Frame</label>
-                    <input required type="text" class="form-control" id="add-bicycle-frame" name="frame">
+                    <input required type="text" class="form-control" id="add-bicycle-frame"
+                           name="frame" th:field="*{frame}">
+                    <small th:each="error : ${#fields.errors('frame')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('fork')}? 'text-danger'">
                     <label for="add-bicycle-fork" class="font-weight-bold">Fork</label>
-                    <input required type="text" class="form-control" id="add-bicycle-fork" name="fork">
+                    <input required type="text" class="form-control" id="add-bicycle-fork"
+                           name="fork" th:field="*{fork}">
+                    <small th:each="error : ${#fields.errors('fork')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('breaks')}? 'text-danger'">
                     <label for="add-bicycle-breaks" class="font-weight-bold">Breaks</label>
-                    <input required type="text" class="form-control" id="add-bicycle-breaks" name="breaks">
+                    <input required type="text" class="form-control" id="add-bicycle-breaks"
+                           name="breaks" th:field="*{breaks}">
+                    <small th:each="error : ${#fields.errors('breaks')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+                <div class="form-group" th:classappend="${#fields.hasErrors('tyres')}? 'text-danger'">
                     <label for="add-bicycle-tyres" class="font-weight-bold">Tyres</label>
-                    <input required type="text" class="form-control" id="add-bicycle-tyres" name="tyres">
+                    <input required type="text" class="form-control" id="add-bicycle-tyres"
+                           name="tyres" th:field="*{tyres}">
+                    <small th:each="error : ${#fields.errors('tyres')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('seat')}? 'text-danger'">
                     <label for="add-bicycle-seat" class="font-weight-bold">Seat</label>
-                    <input required type="text" class="form-control" id="add-bicycle-seat" name="seat">
+                    <input required type="text" class="form-control" id="add-bicycle-seat"
+                           name="seat" th:field="*{seat}">
+                    <small th:each="error : ${#fields.errors('seat')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('price')}? 'text-danger'">
                     <label for="add-bicycle-price" class="font-weight-bold">Price</label>
-                    <input required type="number" step="any" class="form-control" id="add-bicycle-price" name="price">
+                    <input required type="number" step="any" class="form-control" id="add-bicycle-price"
+                           name="price" th:field="*{price}">
+                    <small th:each="error : ${#fields.errors('price')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('bicycleSize')}? 'text-danger'">
                     <label for="add-bicycle-sizes" class="font-weight-bold">Sizes</label>
-                    <select required multiple class="form-control" id="add-bicycle-sizes" name="bicycleSize">
+                    <select required multiple class="form-control" id="add-bicycle-sizes"
+                            name="bicycleSize">
                         <option selected disabled >--- Select Sizes ---</option>
                     </select>
+                    <small th:each="error : ${#fields.errors('bicycleSize')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('category')}? 'text-danger'">
                     <label for="add-bicycle-category" class="font-weight-bold">Categories</label>
-                    <select required class="form-control" id="add-bicycle-category" name="category">
+                    <select required class="form-control" id="add-bicycle-category"
+                            name="category">
                         <option selected disabled >--- Select Category ---</option>
                     </select>
+                    <small th:each="error : ${#fields.errors('category')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
-                <div class="form-group">
+
+                <div class="form-group" th:classappend="${#fields.hasErrors('image')}? 'text-danger'">
                     <label for="add-product-image" class="font-weight-bold">Images</label>
-                    <input required type="file" class="form-control-file" id="add-product-image" name="image">
+                    <input required type="file" class="form-control-file" id="add-product-image"
+                           name="image" th:field="*{image}">
+                    <small th:each="error : ${#fields.errors('image')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                 </div>
+
                 <hr class="hr-2 bg-dark">
                 <div class="button-holder d-flex justify-content-center">
                     <button type="submit" class="btn btn-success">Add Bicycle</button>
