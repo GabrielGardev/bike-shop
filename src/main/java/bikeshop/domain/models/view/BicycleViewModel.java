@@ -10,6 +10,7 @@ public class BicycleViewModel {
     private String description;
     private String color;
     private BigDecimal price;
+    private Double discount;
     private String imageUrl;
     private String category;
     private Set<String> bicycleSize;
@@ -61,6 +62,14 @@ public class BicycleViewModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public String getImageUrl() {

@@ -155,6 +155,20 @@ public class BicycleController extends BaseController {
         return view("bicycle/bicycles-by-category", modelAndView);
     }
 
+    @GetMapping("/promotions")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Promotions")
+    public ModelAndView getBicyclesOnPromo(ModelAndView modelAndView) {
+        List<BicycleByCategoryViewModel> allBicyclesOnPromo = bicycleService.findAllOnPromo()
+                .stream()
+                .map(bike -> mapper.map(bike, BicycleByCategoryViewModel.class))
+                .collect(Collectors.toList());
+
+        modelAndView.addObject("bicycles", allBicyclesOnPromo);
+
+        return view("bicycle/bicycles-by-category", modelAndView);
+    }
+
     private Set<ComponentServiceModel> setComponents(BicycleAddBindingModel model) throws IllegalAccessException {
         Set<ComponentServiceModel> components = new HashSet<>();
         for (Field field : model.getClass().getDeclaredFields()) {

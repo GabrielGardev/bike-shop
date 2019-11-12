@@ -26,6 +26,7 @@
                 <th>Category</th>
                 <th>Size</th>
                 <th>Price</th>
+                <th>Discount</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -45,6 +46,7 @@
                     <td th:text="${bicycle.category}"></td>
                     <td th:text="${bicycle.bicycleSize}"></td>
                     <td th:text="${bicycle.price}"></td>
+                    <td th:text="${bicycle.discount} + '%'"></td>
                     <td>
                         <a th:href="@{/bicycles/details/{id}(id=${bicycle.id})}"
                            class="btn btn-secondary font-weight-bold text-white">Details</a>

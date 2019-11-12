@@ -4,24 +4,35 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:include="~{fragments/head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/error-page.css}">
 </head>
 <body>
 <header>
     <th:block th:include="~{fragments/navbar}"></th:block>
 </header>
 <main>
-    <div class="container mt-3 mb-3">
-        <h1 class="text-center text-dark">Something Went Wrong</h1>
-        <hr class="hr-2 bg-dark ">
-        <div class="text-center">
-            <h3 th:text="${message}" style="color: red;"></h3>
+    <section class="page_404">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 ">
+                    <div class="col-sm-10 col-sm-offset-1  text-center">
+                        <div class="four_zero_four_bg">
+                            <h1 class="text-center" th:text="${statusCode}"></h1>
+                        </div>
+
+                        <div class="contant_box_404">
+                            <h3 class="h2">
+                                Something Went Wrong
+                            </h3>
+                                <p th:text="${message}" style="color: red;"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="text-center" >
-            <img th:src="'https://http.cat/' + ${statusCode}" alt="Cat">
-        </div>
-    </div>
+    </section>
 </main>
-<div>
+<div class="fixed-bottom">
     <th:block th:include="~{fragments/footer}"></th:block>
 </div>
 </body>

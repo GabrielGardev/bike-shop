@@ -64,8 +64,21 @@
 
 
         <!--                Second line-->
-        <ul class="navbar-nav justify-content-start w-100 bg-secondary px-3" id="categoryNav">
+        <ul class="navbar-nav justify-content-start w-100 bg-secondary px-3">
 
+            <li class="nav-item active font-weight-bold">
+                <a class="nav-link" th:href="@{/bicycles/promotions}">PROMOTIONS</a>
+            </li>
+
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="nav-link active font-weight-bold dropdown-toggle" href="#" role="button" id="categoryDropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">BICYCLES</a>
+                    <div class="dropdown-menu" aria-labelledby="categoryDropdown" id="categoryNav">
+
+                    </div>
+                </div>
+            </li>
         </ul>
         <!--                end of second line-->
 
@@ -75,9 +88,7 @@
             .then((response) => response.json())
             .then((json) => {
                 json.forEach((category) => $('#categoryNav')
-                    .append(`<li class="nav-item active">
-                                <a class="nav-link font-weight-bold" href="/bicycles/${category.name.toLowerCase()}">${category.name}</a>
-                            </li>`));
+                    .append(`<a class="dropdown-item font-weight-bold" href="/bicycles/${category.name.toLowerCase()}">${category.name}</a>`));
             })
             .catch((err) => console.log(err));
     </script>

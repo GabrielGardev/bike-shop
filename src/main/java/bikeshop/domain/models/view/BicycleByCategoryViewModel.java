@@ -9,6 +9,7 @@ public class BicycleByCategoryViewModel {
     private String make;
     private String model;
     private BigDecimal price;
+    private Double discount;
     private String imageUrl;
     private Set<String> bicycleSize;
 
@@ -42,6 +43,14 @@ public class BicycleByCategoryViewModel {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public String getImageUrl() {

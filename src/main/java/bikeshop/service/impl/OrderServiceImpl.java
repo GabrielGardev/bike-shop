@@ -60,8 +60,12 @@ public class OrderServiceImpl implements OrderService {
         order.setBicycle(bicycle);
         order.setUser(user);
 
-        BigDecimal totalPrice = bicycle
-                .getPrice()
+        BigDecimal price = bicycle.getPrice();
+        if (bicycle.getDiscount() != null){
+            double discount = (100 - bicycle.getDiscount()) / 100;
+            price = price.multiply(BigDecimal.valueOf(discount));
+        }
+        BigDecimal totalPrice = price
                 .multiply(BigDecimal.valueOf(order.getQuantity()));
         order.setTotalPrice(totalPrice);
 

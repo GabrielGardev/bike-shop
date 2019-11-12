@@ -29,10 +29,21 @@
                 <div class="col-md-3">
                     <div class="bg-light p-3 border border-secondary">
                         <form th:action="@{/orders/order-details/{id}(id=${bicycle.id})}" th:method="post" th:object="${orderModel}">
+
                             <div class="form-group">
-                                <p class="mb-0">Price</p>
-                                <h3 th:text="${bicycle.price} + '$'"></h3>
+                                <div th:switch="${bicycle.discount}">
+                                    <div th:case="0">
+                                        <p class="mb-0">Price</p>
+                                        <h3 th:text="${bicycle.price} + '$'"></h3>
+                                    </div>
+                                    <div th:case="*">
+                                        <p class="mb-0">Price</p>
+                                        <del><h4 th:text="${bicycle.price} + '$'"></h4></del>
+                                        <h3 class="text-danger" th:text="${#numbers.formatDecimal(bicycle.price * ((100 - bicycle.discount) / 100), 0, 'COMMA', 2, 'POINT')} + '$'"></h3>
+                                    </div>
+                                </div>
                             </div>
+
                             <hr>
                             <div class="form-group" th:classappend="${#fields.hasErrors('bicycleSize')}? 'text-danger'">
                                 <label for="select-sizes">Size:</label>

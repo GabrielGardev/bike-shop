@@ -13,6 +13,7 @@ public class Bicycle extends BaseEntity{
     private String description;
     private String color;
     private BigDecimal price;
+    private Double discount;
     private String imageUrl;
     private Category category;
     private Set<BicycleSize> bicycleSize;
@@ -61,6 +62,15 @@ public class Bicycle extends BaseEntity{
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    @Column(nullable = false)
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     @Column(name = "image_url")

@@ -1,6 +1,5 @@
 package bikeshop.service.impl;
 
-import bikeshop.common.Constants;
 import bikeshop.domain.entities.Bicycle;
 import bikeshop.domain.entities.BicycleSize;
 import bikeshop.domain.entities.Category;
@@ -15,10 +14,12 @@ import bikeshop.service.BicycleService;
 import bikeshop.service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,9 @@ import static bikeshop.common.Constants.*;
 
 @Service
 public class BicycleServiceImpl implements BicycleService {
+    private static int BICYCLES_ON_DISCOUNT = 3;
+    private static Double BICYCLES_DISCOUNT = 10d;
+    private static Double MIN_BICYCLES_DISCOUNT = 0d;
 
     private final BicycleRepository bicycleRepository;
     private final CategoryRepository categoryRepository;
@@ -125,6 +129,37 @@ public class BicycleServiceImpl implements BicycleService {
                 .stream()
                 .map(this::getBicycleServiceModel)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BicycleServiceModel> findAllOnPromo() {
+        return bicycleRepository.findAllByDiscountIsGreaterThan(MIN_BICYCLES_DISCOUNT)
+                .stream()
+                .map(this::getBicycleServiceModel)
+                .collect(Collectors.toList());
+    }
+
+    @Scheduled(fixedRate = 120000)
+    private void generateDiscounts(){
+       bicycleRepository.setAllDiscountsToZero();
+
+        List<Bicycle> allBicycles = bicycleRepository.findAll();
+        if (allBicycles.isEmpty()){
+            return;
+        }
+
+        if (allBicycles.size() < BICYCLES_ON_DISCOUNT){
+            BICYCLES_ON_DISCOUNT = allBicycles.size();
+        }
+
+        Random rnd = new Random();
+        for (int i = 0; i < BICYCLES_ON_DISCOUNT; i++) {
+            int position = rnd.nextInt(allBicycles.size());
+            Bicycle bicycle = allBicycles.get(position);
+            bicycle.setDiscount(BICYCLES_DISCOUNT);
+            bicycleRepository.save(bicycle);
+            allBicycles.remove(bicycle);
+        }
     }
 
     private BicycleServiceModel getBicycleServiceModel(Bicycle bicycle) {

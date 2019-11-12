@@ -3,6 +3,7 @@ package bikeshop.service;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.error.BicycleNotFoundException;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface BicycleService {
@@ -18,4 +19,7 @@ public interface BicycleService {
     void deleteBicycleById(String id);
 
     List<BicycleServiceModel> findAllByCategory(String category);
+
+    List<BicycleServiceModel> findAllOnPromo();
+
 }

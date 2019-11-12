@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.ValidationException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler  {
     private static final String EXCEPTION_VIEW_ROUTE = "/error";

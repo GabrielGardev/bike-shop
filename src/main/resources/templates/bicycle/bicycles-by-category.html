@@ -41,7 +41,15 @@
                                 </div>
 
                                 <a class="cart" th:href="@{/bicycles/details/{id}(id=${bicycle.id})}">
-                                    <span class="price" th:text="'$' + ${bicycle.price}"></span>
+                                    <th:block th:switch="${bicycle.discount}">
+                                        <th:block th:case="0">
+                                            <span class="price" th:text="'$' + ${bicycle.price}"></span>
+                                        </th:block>
+                                        <th:block th:case="*">
+                                            <span class="price text-danger"
+                                                  th:text="'$' + ${#numbers.formatDecimal(bicycle.price * ((100 - bicycle.discount) / 100), 0, 'COMMA', 2, 'POINT')}"></span>
+                                        </th:block>
+                                    </th:block>
                                     <span class="add-to-cart">
                                     <span class="txt">Buy</span>
                                     </span>
