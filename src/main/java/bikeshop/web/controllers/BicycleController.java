@@ -159,12 +159,12 @@ public class BicycleController extends BaseController {
     @PreAuthorize("isAuthenticated()")
     @PageTitle("Promotions")
     public ModelAndView getBicyclesOnPromo(ModelAndView modelAndView) {
-        List<BicycleByCategoryViewModel> allByCategoryId = bicycleService.findAllOnPromo()
+        List<BicycleByCategoryViewModel> allBicycleOnPromo = bicycleService.findAllOnPromo()
                 .stream()
                 .map(bike -> mapper.map(bike, BicycleByCategoryViewModel.class))
                 .collect(Collectors.toList());
 
-        modelAndView.addObject("bicycles", allByCategoryId);
+        modelAndView.addObject("bicycles", allBicycleOnPromo);
 
         return view("bicycle/bicycles-by-category", modelAndView);
     }
