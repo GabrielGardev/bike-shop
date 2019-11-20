@@ -65,6 +65,7 @@ public class BicycleServiceImpl implements BicycleService {
 
         bicycle.setCategory(category);
         bicycle.setBicycleSize(sizes);
+        bicycle.setDiscount(0.0);
 
         bicycleRepository.save(bicycle);
     }
