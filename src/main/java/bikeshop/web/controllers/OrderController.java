@@ -1,20 +1,17 @@
 package bikeshop.web.controllers;
 
-import bikeshop.domain.models.binding.OrderCreateBindingModel;
 import bikeshop.domain.models.service.OrderServiceModel;
+import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.OrderViewModel;
-import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.OrderService;
 import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
 import java.security.Principal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,37 +32,6 @@ public class OrderController extends BaseController {
         this.mapper = mapper;
     }
 
-    @PostMapping("/order-details/{id}")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView orderBicycleConfirm(@Valid @ModelAttribute(name = "orderModel") OrderCreateBindingModel orderModel,
-                                     @PathVariable(name = "id") String bicycleId,
-                                     ModelAndView modelAndView,
-                                     Principal principal,
-                                     BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
-            return view("bicycle/details");
-        }
-
-        OrderServiceModel serviceModel = mapper.map(orderModel, OrderServiceModel.class);
-        OrderServiceModel order = orderService.viewOrder(bicycleId, principal.getName(), serviceModel);
-        OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
-
-        modelAndView.addObject("order", orderViewModel);
-        return view("order/order-details", modelAndView);
-    }
-
-    @PostMapping("/add")
-    @PreAuthorize("isAuthenticated()")
-    public ModelAndView orderBicycleConfirm(@RequestParam String bicycleId,
-                                            @RequestParam String bicycleSize,
-                                            @RequestParam String quantity,
-                                            @RequestParam String totalPrice,
-                                            Principal principal){
-        orderService.createOrder(bicycleId, bicycleSize, quantity, totalPrice, principal.getName());
-
-        return redirect("/orders/customer");
-    }
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PageTitle("All Orders")
@@ -75,6 +41,19 @@ public class OrderController extends BaseController {
 
         modelAndView.addObject("orders", viewModels);
         return view("order/list-orders", modelAndView);
+    }
+
+    @GetMapping("/details/{id}")
+    @PreAuthorize("isAuthenticated()")
+    @PageTitle("Orders Details")
+    public ModelAndView allOrderDetails(@PathVariable String id, ModelAndView modelAndView) {
+        OrderServiceModel order = orderService.findOrderById(id);
+        OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
+        List<BicycleViewModel> bicycles = orderViewModel.getBicycles();
+
+        modelAndView.addObject("bicycles", bicycles);
+
+        return view("order/order-details", modelAndView);
     }
 
     @GetMapping("/customer")

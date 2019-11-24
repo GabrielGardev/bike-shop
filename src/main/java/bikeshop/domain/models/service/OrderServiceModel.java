@@ -2,22 +2,21 @@ package bikeshop.domain.models.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class OrderServiceModel extends BaseServiceModel {
 
-    private BicycleServiceModel bicycle;
+    private List<BicycleServiceModel> bicycles;
     private UserServiceModel user;
-    private String bicycleSize;
-    private int quantity;
     private BigDecimal totalPrice;
     private LocalDateTime finishedOn;
 
-    public BicycleServiceModel getBicycle() {
-        return bicycle;
+    public List<BicycleServiceModel> getBicycles() {
+        return bicycles;
     }
 
-    public void setBicycle(BicycleServiceModel bicycle) {
-        this.bicycle = bicycle;
+    public void setBicycles(List<BicycleServiceModel> bicycles) {
+        this.bicycles = bicycles;
     }
 
     public UserServiceModel getUser() {
@@ -26,22 +25,6 @@ public class OrderServiceModel extends BaseServiceModel {
 
     public void setUser(UserServiceModel user) {
         this.user = user;
-    }
-
-    public String getBicycleSize() {
-        return bicycleSize;
-    }
-
-    public void setBicycleSize(String bicycleSize) {
-        this.bicycleSize = bicycleSize;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public BigDecimal getTotalPrice() {

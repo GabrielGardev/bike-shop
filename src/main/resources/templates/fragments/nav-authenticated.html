@@ -1,4 +1,4 @@
-<th:block th:fragment>
+<th:block th:fragment xmlns:th="http://www.w3.org/1999/xhtml">
 
     <div class="navbar-header ml-3">
         <a class="navbar-brand font-weight-bold mt-1" th:href="@{/home}">
@@ -76,6 +76,24 @@
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">BICYCLES</a>
                     <div class="dropdown-menu" aria-labelledby="categoryDropdown" id="categoryNav">
 
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item offset-md-8">
+                <div class="dropdown">
+                    <a class="nav-link" th:href="@{/cart/details}" role="button" id="cartDropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <img th:src="@{/images/cart-logo.png}" th:width="24" th:height="24" alt="Cart"/>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="cartDropdown">
+                        <th:block th:each="item : ${#session.getAttribute('shopping-cart')}" th:object="${item}">
+                            <div class="dropdown-item" th:text="|*{bicycle.make} *{bicycle.model} *{bicycle.color} x *{quantity}|"></div>
+                        </th:block>
+                        <div class="dropdown-divider"></div>
+                        <div class="text-center">
+                            <a th:href="@{/cart/details}" class="btn btn-danger">Proceed to checkout</a>
+                        </div>
                     </div>
                 </div>
             </li>

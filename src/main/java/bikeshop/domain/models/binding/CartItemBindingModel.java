@@ -8,11 +8,10 @@ import java.math.BigDecimal;
 
 import static bikeshop.common.Constants.*;
 
-public class OrderCreateBindingModel {
+public class CartItemBindingModel {
 
     private String bicycleSize;
     private int quantity;
-    private BigDecimal totalPrice;
 
     @NotNull(message = NULL_BICYCLE_SIZE_MESSAGE)
     @NotEmpty(message = EMPTY_BICYCLE_SIZE_MESSAGE)
@@ -33,13 +32,5 @@ public class OrderCreateBindingModel {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
     }
 }

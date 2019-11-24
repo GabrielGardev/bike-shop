@@ -26,7 +26,8 @@ public class GlobalExceptionHandler  {
             BicycleSizeNotFoundException.class,
             CategoryNotFoundException.class,
             ComponentNotFoundException.class,
-            PasswordDontMatchException.class})
+            PasswordDontMatchException.class,
+            OrderNotFoundException.class})
     public ModelAndView handleNotFoundExceptions(BaseException e) {
         e.printStackTrace();
         return fillModelAndView(e.getStatus(), e.getMessage());

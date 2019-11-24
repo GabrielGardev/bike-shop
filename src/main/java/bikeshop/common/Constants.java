@@ -13,8 +13,8 @@ public final class Constants {
     public static final String PASSWORDS_DONT_MATCH = "Old password dont match current password!";
     public static final String INCORRECT_ID = "Incorrect id!";
     public static final String INCORRECT_CATEGORY = "Incorrect category name!";
-    public static final String INCORRECT_SIZE_NAME = "Incorrect bicycle size name!";
     public static final String INCORRECT_AUTHORITY = "Incorrect authority name!";
+    public static final String INCORRECT_ORDER = "Incorrect order id!";
 
     public static final String DUPLICATE_USERNAME = "Username already exist!";
     public static final String DUPLICATE_EMAIL = "Email already exist!";

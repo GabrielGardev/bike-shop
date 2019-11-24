@@ -4,8 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <th:block th:include="~{fragments/head}"></th:block>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/pop-up.images.css}">
-    <script th:src="@{/js/pop-up.images.js}"></script>
 </head>
 <body>
 <header>
@@ -19,33 +17,22 @@
             <thead>
             <tr>
                 <th>#</th>
-                <th>Image</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Size</th>
                 <th>Customer Names</th>
-                <th>Quantity</th>
-                <th>Price</th>
                 <th>Date</th>
+                <th>Price</th>
+                <th>View Products</th>
             </tr>
             </thead>
             <tbody>
-            <th:block th:each="order, iter : ${orders}">
+            <th:block th:each="order, iter : ${orders}" th:object="${order}">
                 <tr>
                     <td th:text="${iter.index + 1}"></td>
-                    <td>
-                        <a class="image-link" th:href="${order.bicycle.imageUrl}">
-                            <img th:src="${order.bicycle.imageUrl}" width="40" height="40"
-                                 alt="Bicycle">
-                        </a>
+                    <td th:text="*{user.firstName} + ' ' + *{user.lastName}"></td>
+                    <td th:text="*{date}"></td>
+                    <td th:text="*{totalPrice}"></td>
+                    <td class="align-middle">
+                        <a th:href="@{/orders/details/{id}(id=*{id})}" class="btn btn-info">Products</a>
                     </td>
-                    <td th:text="${order.bicycle.make}"></td>
-                    <td th:text="${order.bicycle.model}"></td>
-                    <td th:text="${order.bicycleSize}"></td>
-                    <td th:text="${order.user.firstName} + ' ' + ${order.user.lastName}"></td>
-                    <td th:text="${order.quantity}"></td>
-                    <td th:text="${order.totalPrice}"></td>
-                    <td th:text="${order.date}"></td>
                 </tr>
             </th:block>
             </tbody>
@@ -60,24 +47,6 @@
 <script>
     $(document).ready(function () {
         $('#table_id').DataTable();
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $('.image-link').magnificPopup({
-            type: 'image',
-            mainClass: 'mfp-with-zoom',
-
-            zoom: {
-                enabled: true,
-
-                duration: 300,
-                easing: 'ease-in-out',
-                opener: function(openerElement) {
-                    return openerElement.is('img') ? openerElement : openerElement.find('img');
-                }
-            }
-        });
     });
 </script>
 </html>

@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface OrderService {
 
-    OrderServiceModel viewOrder(String bicycleId, String username, OrderServiceModel model);
-
-    void createOrder(String bicycleId, String bicycleSize, String quantity, String totalPrice, String username);
+    void createOrder(OrderServiceModel order);
 
     List<OrderServiceModel> findAllOrders();
 
     List<OrderServiceModel> findByCustomerName(String username);
+
+    OrderServiceModel findOrderById(String id);
 }

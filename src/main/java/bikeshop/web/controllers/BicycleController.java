@@ -2,19 +2,16 @@ package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.BicycleAddBindingModel;
 import bikeshop.domain.models.binding.BicycleEditBindingModel;
-import bikeshop.domain.models.binding.OrderCreateBindingModel;
+import bikeshop.domain.models.binding.CartItemBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
 import bikeshop.domain.models.service.ComponentServiceModel;
 import bikeshop.domain.models.view.BicycleByCategoryViewModel;
 import bikeshop.domain.models.view.BicycleViewModel;
-import bikeshop.domain.models.view.ComponentViewModel;
 import bikeshop.domain.models.view.ComponentsViewModel;
-import bikeshop.error.BicycleNotFoundException;
 import bikeshop.service.BicycleService;
 import bikeshop.service.CloudinaryService;
 import bikeshop.service.ComponentService;
 import bikeshop.web.annotations.PageTitle;
-import org.hibernate.boot.jaxb.spi.Binding;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -93,7 +89,7 @@ public class BicycleController extends BaseController {
     @PageTitle("Bicycle Details")
     public ModelAndView bicycleDetails(@PathVariable String id,
                                        ModelAndView modelAndView,
-                                       @ModelAttribute(name = "orderModel") OrderCreateBindingModel orderModel){
+                                       @ModelAttribute(name = "cartModel") CartItemBindingModel cartModel){
         BicycleServiceModel serviceModel = bicycleService.findById(id);
         BicycleViewModel bicycle = mapper.map(serviceModel, BicycleViewModel.class);
 

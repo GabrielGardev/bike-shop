@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="bg-light p-3 border border-secondary">
-                        <form th:action="@{/orders/order-details/{id}(id=${bicycle.id})}" th:method="post" th:object="${orderModel}">
+                        <form th:action="@{/cart/add}" th:method="post" th:object="${cartModel}">
 
                             <div class="form-group">
                                 <div th:switch="${bicycle.discount}">
@@ -65,8 +65,9 @@
                                 <small th:each="error : ${#fields.errors('quantity')}" th:utext="${error}  + '&lt;br /&gt;'"></small>
                             </div>
                             <hr>
+                            <input type="hidden" name="id" th:value="${bicycle.id}">
                             <div class="button-holder d-flex justify-content-center">
-                                <button type="submit" class="btn btn-danger font-weight-bold">Order now</button>
+                                <button type="submit" class="btn btn-danger font-weight-bold">Add to cart</button>
                             </div>
                         </form>
                     </div>

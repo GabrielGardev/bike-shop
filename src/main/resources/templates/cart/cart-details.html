@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <th:block th:include="~{fragments/head}"></th:block>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cart.css}">
+</head>
+<body>
+<header>
+    <th:block th:include="~{fragments/navbar}"></th:block>
+</header>
+<main>
+    <div class="px-4 px-lg-0">
+        <div class="pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+
+                        <!-- Shopping cart table -->
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="p-2 px-3 text-uppercase">Product</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Price</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Quantity</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Remove</div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="item : ${#session.getAttribute('shopping-cart')}" th:object="${item}">
+                                    <tr>
+                                        <th scope="row" class="border-0">
+                                            <div class="p-2">
+                                                <img th:src="*{bicycle.imageUrl}" alt="bicycle" width="70" class="img-fluid rounded shadow-sm">
+                                                <div class="ml-3 d-inline-block align-middle">
+                                                    <h5 class="mb-0">
+                                                        <a th:href="@{/bicycles/details/{id}(id=*{bicycle.id})}" class="text-dark d-inline-block align-middle"
+                                                        th:text="|*{bicycle.make} *{bicycle.model} - *{bicycle.color}|"></a>
+                                                    </h5>
+                                                    <span class="text-muted font-weight-normal font-italic d-block"
+                                                    th:text="|Category: *{bicycle.category}|"></span>
+                                                </div>
+                                            </div>
+                                        </th>
+
+                                        <td class="border-0 align-middle">
+                                            <strong th:text="${#numbers.formatDecimal(item.bicycle.price * ((100 - item.bicycle.discount) / 100), 0, 'COMMA', 2, 'POINT')} + '$'"></strong>
+                                        </td>
+
+                                        <td class="border-0 align-middle">
+                                            <strong th:text="*{quantity}"></strong>
+                                        </td>
+
+                                        <td class="border-0 align-middle">
+                                            <form th:action="@{/cart/remove}" th:method="delete" >
+                                                <div class="button-holder">
+                                                    <input type="hidden" name="id" th:value="*{bicycle.id}">
+                                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                                </div>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </th:block>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End -->
+                    </div>
+                </div>
+
+                <div class="row py-5 p-4 bg-white rounded shadow-sm">
+                    <div class="col-lg-6">
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Instructions for seller</div>
+                        <div class="p-4">
+                            <p class="font-italic mb-4">If you have some information for the seller you can leave them in the box below</p>
+                            <textarea name="" cols="30" rows="2" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
+                        <div class="p-4">
+                            <p class="font-italic mb-4">Shipping and additional costs are calculated based on values you have entered.</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Order Subtotal </strong>
+                                    <strong th:text="'$' + ${totalPrice}"></strong>
+                                </li>
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Tax</strong>
+                                    <strong>$0.00</strong>
+                                </li>
+                                <li class="d-flex justify-content-between py-3 border-bottom">
+                                    <strong class="text-muted">Total</strong>
+                                    <h5 class="font-weight-bold" th:text="'$' + ${totalPrice}"></h5>
+                                </li>
+                            </ul>
+                            <form th:action="@{/cart/checkout}" th:method="post">
+                                    <button type="submit" class="btn btn-dark rounded-pill py-2 btn-block font-weight-bolder">Checkout</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+<div>
+    <th:block th:include="~{fragments/footer}"></th:block>
+</div>
+</body>
+</html>
