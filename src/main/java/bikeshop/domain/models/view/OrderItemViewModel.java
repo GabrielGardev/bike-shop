@@ -1,12 +1,22 @@
 package bikeshop.domain.models.view;
 
-import java.io.Serializable;
+import java.math.BigDecimal;
 
-public class CartItemViewModel implements Serializable {
+public class OrderItemViewModel {
 
+    private String id;
     private BicycleViewModel bicycle;
-    private int quantity;
+    private BigDecimal price;
+    private Integer quantity;
     private String bicycleSize;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public BicycleViewModel getBicycle() {
         return bicycle;
@@ -16,11 +26,19 @@ public class CartItemViewModel implements Serializable {
         this.bicycle = bicycle;
     }
 
-    public int getQuantity() {
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 

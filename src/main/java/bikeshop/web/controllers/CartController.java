@@ -2,6 +2,7 @@ package bikeshop.web.controllers;
 
 import bikeshop.domain.models.binding.CartItemBindingModel;
 import bikeshop.domain.models.service.BicycleServiceModel;
+import bikeshop.domain.models.service.OrderItemServiceModel;
 import bikeshop.domain.models.service.OrderServiceModel;
 import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.CartItemViewModel;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.ArrayList;
@@ -63,12 +66,11 @@ public class CartController extends BaseController{
         }
         BicycleViewModel bicycle = mapper.map(bicycleService.findById(id), BicycleViewModel.class);
 
-        CartItemViewModel cartItem = new CartItemViewModel();
+        CartItemViewModel cartItem = mapper.map(cartModel, CartItemViewModel.class);
         cartItem.setBicycle(bicycle);
-        cartItem.setQuantity(cartModel.getQuantity());
 
         List<CartItemViewModel> cart = this.retrieveCart(session);
-        this.addItemToCart(cartItem, cart);
+        this.addItemToCart(cartItem, cart, cartModel.getBicycleSize());
 
         return redirect("/cart/details");
     }
@@ -106,9 +108,10 @@ public class CartController extends BaseController{
         }
     }
 
-    private void addItemToCart(CartItemViewModel item, List<CartItemViewModel> cart) {
+    private void addItemToCart(CartItemViewModel item, List<CartItemViewModel> cart, String bicycleSize) {
         for (CartItemViewModel shoppingCartItem : cart) {
-            if (shoppingCartItem.getBicycle().getId().equals(item.getBicycle().getId())) {
+            if (shoppingCartItem.getBicycle().getId().equals(item.getBicycle().getId())
+            && shoppingCartItem.getBicycleSize().equals(bicycleSize)) {
                 shoppingCartItem.setQuantity(shoppingCartItem.getQuantity() + item.getQuantity());
                 return;
             }
@@ -119,15 +122,20 @@ public class CartController extends BaseController{
     private BigDecimal calcTotal(List<CartItemViewModel> cart) {
         BigDecimal result = new BigDecimal(0);
         for (CartItemViewModel item : cart) {
-            BigDecimal price = item.getBicycle().getPrice();
-            double discount = (100 - item.getBicycle().getDiscount()) / 100;
-
-            price = price.multiply(BigDecimal.valueOf(discount));
+            BigDecimal price = this.getIndividualPriceWithDiscount(item);
 
             result = result.add(price.multiply(new BigDecimal(item.getQuantity())));
         }
 
         return result;
+    }
+
+    private BigDecimal getIndividualPriceWithDiscount(CartItemViewModel item) {
+        BigDecimal price = item.getBicycle().getPrice();
+        double discount = (100 - item.getBicycle().getDiscount()) / 100;
+
+        price = price.multiply(BigDecimal.valueOf(discount));
+        return price;
     }
 
     private void removeItemFromCart(String id, List<CartItemViewModel> cart) {
@@ -138,13 +146,12 @@ public class CartController extends BaseController{
         OrderServiceModel orderServiceModel = new OrderServiceModel();
         orderServiceModel.setUser(userService.findUserByUsername(username));
 
-        List<BicycleServiceModel> bicycles = new ArrayList<>();
+        List<OrderItemServiceModel> bicycles = new ArrayList<>();
         for (CartItemViewModel item : cart) {
-            BicycleServiceModel bicycleServiceModel = mapper.map(item.getBicycle(), BicycleServiceModel.class);
+            OrderItemServiceModel orderItemServiceModel = mapper.map(item, OrderItemServiceModel.class);
+            orderItemServiceModel.setPrice(this.getIndividualPriceWithDiscount(item));
 
-            for (int i = 0; i < item.getQuantity(); i++) {
-                bicycles.add(bicycleServiceModel);
-            }
+            bicycles.add(orderItemServiceModel);
         }
 
         orderServiceModel.setBicycles(bicycles);

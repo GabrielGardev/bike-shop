@@ -9,20 +9,20 @@ import java.util.List;
 @Table(name = "orders")
 public class Order extends BaseEntity {
 
-    private List<Bicycle> bicycles;
+    private List<OrderItem> bicycles;
     private User user;
     private BigDecimal totalPrice;
     private LocalDateTime finishedOn;
 
-    @ManyToMany(targetEntity = Bicycle.class, cascade = CascadeType.MERGE)
+    @ManyToMany(targetEntity = OrderItem.class, cascade = CascadeType.MERGE)
     @JoinTable(name = "orders_bicycles",
             joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "bicycle_id", referencedColumnName = "id"))
-    public List<Bicycle> getBicycles() {
+    public List<OrderItem> getBicycles() {
         return bicycles;
     }
 
-    public void setBicycles(List<Bicycle> bicycles) {
+    public void setBicycles(List<OrderItem> bicycles) {
         this.bicycles = bicycles;
     }
 

@@ -2,6 +2,7 @@ package bikeshop.web.controllers;
 
 import bikeshop.domain.models.service.OrderServiceModel;
 import bikeshop.domain.models.view.BicycleViewModel;
+import bikeshop.domain.models.view.OrderItemViewModel;
 import bikeshop.domain.models.view.OrderViewModel;
 import bikeshop.service.OrderService;
 import bikeshop.web.annotations.PageTitle;
@@ -49,9 +50,9 @@ public class OrderController extends BaseController {
     public ModelAndView allOrderDetails(@PathVariable String id, ModelAndView modelAndView) {
         OrderServiceModel order = orderService.findOrderById(id);
         OrderViewModel orderViewModel = mapper.map(order, OrderViewModel.class);
-        List<BicycleViewModel> bicycles = orderViewModel.getBicycles();
+        List<OrderItemViewModel> orders = orderViewModel.getBicycles();
 
-        modelAndView.addObject("bicycles", bicycles);
+        modelAndView.addObject("orders", orders);
 
         return view("order/order-details", modelAndView);
     }

@@ -6,16 +6,16 @@ import java.util.List;
 
 public class OrderServiceModel extends BaseServiceModel {
 
-    private List<BicycleServiceModel> bicycles;
+    private List<OrderItemServiceModel> bicycles;
     private UserServiceModel user;
     private BigDecimal totalPrice;
     private LocalDateTime finishedOn;
 
-    public List<BicycleServiceModel> getBicycles() {
+    public List<OrderItemServiceModel> getBicycles() {
         return bicycles;
     }
 
-    public void setBicycles(List<BicycleServiceModel> bicycles) {
+    public void setBicycles(List<OrderItemServiceModel> bicycles) {
         this.bicycles = bicycles;
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 public class OrderViewModel {
 
     private String id;
-    private List<BicycleViewModel> bicycles;
+    private List<OrderItemViewModel> bicycles;
     private UserProfileViewModel user;
     private BigDecimal totalPrice;
     private String finishedOn;
@@ -19,11 +19,11 @@ public class OrderViewModel {
         this.id = id;
     }
 
-    public List<BicycleViewModel> getBicycles() {
+    public List<OrderItemViewModel> getBicycles() {
         return bicycles;
     }
 
-    public void setBicycles(List<BicycleViewModel> bicycles) {
+    public void setBicycles(List<OrderItemViewModel> bicycles) {
         this.bicycles = bicycles;
     }
 

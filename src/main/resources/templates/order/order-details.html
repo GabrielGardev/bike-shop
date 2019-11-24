@@ -21,21 +21,27 @@
                 <th>#</th>
                 <th>Image</th>
                 <th>Bicycle</th>
-                <th>Price</th>
+                <th>Quantity</th>
+                <th>Single Price</th>
             </tr>
             </thead>
             <tbody>
-            <th:block th:each="bicycle, iter : ${bicycles}" th:object="${bicycle}">
+            <th:block th:each="order, iter : ${orders}" th:object="${order}">
                 <tr>
                     <td th:text="${iter.index + 1}"></td>
                     <td>
-                        <a class="image-link" th:href="*{imageUrl}">
-                            <img th:src="*{imageUrl}" width="70" height="70"
+                        <a class="image-link" th:href="*{bicycle.imageUrl}">
+                            <img th:src="*{bicycle.imageUrl}" width="70" height="70"
                                  alt="Bicycle">
                         </a>
                     </td>
-                    <td th:text="|*{make} *{model}, *{color}, *{category}, *{bicycleSize}|"></td>
-                    <td th:text="*{price}"></td>
+                    <td>
+                        <a th:href="@{/bicycles/details/{id}(id=*{bicycle.id})}" class="text-dark font-weight-bold"
+                           th:text="|*{bicycle.make} *{bicycle.model}, *{bicycle.color}, *{bicycle.category}, Size: *{bicycleSize}|">
+                        </a>
+                    </td>
+                    <td th:text="*{quantity}"></td>
+                    <td th:text="'$' + *{price}"></td>
                 </tr>
             </th:block>
             </tbody>
