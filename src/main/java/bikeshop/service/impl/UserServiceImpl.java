@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUserProfile(UserServiceModel userServiceModel, String oldPassword) {
+    public UserServiceModel editUserProfile(UserServiceModel userServiceModel, String oldPassword) {
         User user = (User) this.loadUserByUsername(userServiceModel.getUsername());
 
         this.checkIfPasswordsMatch(oldPassword, user);
@@ -74,7 +74,9 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userServiceModel.getEmail());
         user.setFirstName(userServiceModel.getFirstName());
         user.setLastName(userServiceModel.getLastName());
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return mapper.map(savedUser, UserServiceModel.class);
     }
 
     @Override
@@ -108,7 +110,7 @@ public class UserServiceImpl implements UserService {
                 break;
         }
 
-        this.userRepository.saveAndFlush(mapper.map(userServiceModel, User.class));
+        userRepository.save(mapper.map(userServiceModel, User.class));
     }
 
     @Override

@@ -130,7 +130,7 @@ public class UserController extends BaseController{
     public ModelAndView setUser(@PathVariable String id) {
         userService.setUserRole(id, "user");
 
-        return super.redirect("/users/all");
+        return redirect("/users/all");
     }
 
     @PatchMapping("/set-moderator/{id}")
@@ -138,7 +138,7 @@ public class UserController extends BaseController{
     public ModelAndView setModerator(@PathVariable String id) {
         userService.setUserRole(id, "moderator");
 
-        return super.redirect("/users/all");
+        return redirect("/users/all");
     }
 
     @PatchMapping("/set-admin/{id}")
@@ -146,7 +146,7 @@ public class UserController extends BaseController{
     public ModelAndView setAdmin(@PathVariable String id) {
         userService.setUserRole(id, "admin");
 
-        return super.redirect("/users/all");
+        return redirect("/users/all");
     }
 
     private Set<String> getAuthoritiesToString(UserServiceModel userServiceModel) {
