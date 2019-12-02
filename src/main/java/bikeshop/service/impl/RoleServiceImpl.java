@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static bikeshop.common.Constants.INCORRECT_AUTHORITY;
+import static bikeshop.common.Constants.*;
 
 
 @Service
@@ -33,7 +33,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void seedRolesInDb() {
         if (roleRepository.count() == 0){
-            roleRepository.saveAll(createAllRoles());
+            roleRepository.save(new Role(ROLE_ROOT));
+            roleRepository.save(new Role(ROLE_ADMIN));
+            roleRepository.save(new Role(ROLE_MODERATOR));
+            roleRepository.save(new Role(ROLE_USER));
         }
     }
 
@@ -52,14 +55,5 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new AuthorityNotFoundException(INCORRECT_AUTHORITY));
 
         return mapper.map(role, RoleServiceModel.class);
-    }
-
-    private List<Role> createAllRoles() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(new Role(Constants.ROLE_ROOT));
-        roles.add(new Role(Constants.ROLE_ADMIN));
-        roles.add(new Role(Constants.ROLE_MODERATOR));
-        roles.add(new Role(Constants.ROLE_USER));
-        return roles;
     }
 }
