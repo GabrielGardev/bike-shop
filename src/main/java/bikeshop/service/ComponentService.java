@@ -6,5 +6,5 @@ public interface ComponentService {
 
     ComponentServiceModel saveComponent(ComponentServiceModel componentServiceModel);
 
-    void editById(String id, String description);
+    ComponentServiceModel editById(String id, String description);
 }

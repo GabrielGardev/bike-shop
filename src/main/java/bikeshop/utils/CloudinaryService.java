@@ -1,4 +1,4 @@
-package bikeshop.service;
+package bikeshop.utils;
 
 import org.springframework.web.multipart.MultipartFile;
 

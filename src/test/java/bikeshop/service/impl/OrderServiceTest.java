@@ -39,19 +39,19 @@ public class OrderServiceTest {
     private static final String CATEGORY_NAME = "MOUNTAIN";
 
     @InjectMocks
-    private OrderServiceImpl orderService;
+    OrderServiceImpl orderService;
 
     @Mock
-    private OrderRepository orderRepository;
+    OrderRepository orderRepository;
 
     @Mock
-    private BicycleSizeRepository bicycleSizeRepository;
+    BicycleSizeRepository bicycleSizeRepository;
 
     @Mock
-    private OrderItemRepository orderItemRepository;
+    OrderItemRepository orderItemRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
 
     @Before

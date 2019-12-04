@@ -9,7 +9,7 @@ import bikeshop.domain.models.view.BicycleByCategoryViewModel;
 import bikeshop.domain.models.view.BicycleViewModel;
 import bikeshop.domain.models.view.ComponentsViewModel;
 import bikeshop.service.BicycleService;
-import bikeshop.service.CloudinaryService;
+import bikeshop.utils.CloudinaryService;
 import bikeshop.service.ComponentService;
 import bikeshop.web.annotations.PageTitle;
 import org.modelmapper.ModelMapper;

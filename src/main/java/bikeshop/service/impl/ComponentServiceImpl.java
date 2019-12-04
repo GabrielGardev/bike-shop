@@ -37,10 +37,12 @@ public class ComponentServiceImpl implements ComponentService {
     }
 
     @Override
-    public void editById(String id, String description) {
+    public ComponentServiceModel editById(String id, String description) {
         Component component = componentRepository.findById(id)
                 .orElseThrow(() -> new ComponentNotFoundException(INCORRECT_ID));
         component.setDescription(description);
-        componentRepository.save(component);
+
+        Component result = componentRepository.save(component);
+        return mapper.map(result, ComponentServiceModel.class);
     }
 }

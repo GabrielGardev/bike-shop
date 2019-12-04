@@ -28,13 +28,13 @@ public class RoleServiceTest {
     private static List<Role> roleList;
 
     @InjectMocks
-    private RoleServiceImpl roleService;
+    RoleServiceImpl roleService;
 
     @Mock
-    private RoleRepository roleRepository;
+    RoleRepository roleRepository;
 
     @Mock
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Before
     public void init() {

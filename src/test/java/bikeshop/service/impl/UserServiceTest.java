@@ -54,19 +54,19 @@ public class UserServiceTest {
 
 
     @InjectMocks
-    private UserServiceImpl userService;
+    UserServiceImpl userService;
 
     @Mock
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Mock
-    private RoleService roleService;
+    RoleService roleService;
 
     @Mock
-    private ModelMapper modelMapper;
+    ModelMapper modelMapper;
 
     @Mock
-    private BCryptPasswordEncoder encoder;
+    BCryptPasswordEncoder encoder;
 
 
     @Before

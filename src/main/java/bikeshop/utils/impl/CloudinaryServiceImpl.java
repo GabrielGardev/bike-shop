@@ -1,6 +1,6 @@
-package bikeshop.service.impl;
+package bikeshop.utils.impl;
 
-import bikeshop.service.CloudinaryService;
+import bikeshop.utils.CloudinaryService;
 import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
