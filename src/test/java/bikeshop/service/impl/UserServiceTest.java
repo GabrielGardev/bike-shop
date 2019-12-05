@@ -29,9 +29,9 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-    private static final UserServiceModel USER_SERVICE_MODEL = new UserServiceModel();
+    private UserServiceModel USER_SERVICE_MODEL = new UserServiceModel();
     private User USER_ENTITY_MODEL;
-    private static final User INVALID_MODEL = new User();
+    private User INVALID_MODEL = new User();
 
 
     private static final String VALID_USERNAME = "gosho";

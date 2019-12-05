@@ -67,7 +67,7 @@ public class BicycleSizeController extends BaseController{
     @PatchMapping("/delete/{id}")
     @PreAuthorize("hasRole('ROLE_MODERATOR')")
     public ModelAndView delete(@PathVariable String id){
-        bicycleSizeService.deleteBicycleById(id);
+        bicycleSizeService.deleteBicycleSizeById(id);
         return redirect("/sizes/all");
     }
 

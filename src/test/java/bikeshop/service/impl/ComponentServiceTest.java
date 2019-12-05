@@ -59,7 +59,7 @@ public class ComponentServiceTest {
     }
 
 
-    @Test
+   @Test
     public void saveComponent_shouldSaveCorrectly_whenDontPersistInDBAlready(){
         //Arrange
         when(componentRepository.findByTypeAndDescription(any(), any()))

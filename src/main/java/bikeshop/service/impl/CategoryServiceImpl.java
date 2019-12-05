@@ -1,6 +1,5 @@
 package bikeshop.service.impl;
 
-import bikeshop.common.Constants;
 import bikeshop.domain.entities.Category;
 import bikeshop.domain.models.service.CategoryServiceModel;
 import bikeshop.error.CategoryAlreadyExistException;
@@ -52,13 +51,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void editCategory(String id, CategoryServiceModel categoryServiceModel) {
+    public CategoryServiceModel editCategory(String id, CategoryServiceModel categoryServiceModel) {
         String name = categoryServiceModel.getName();
         this.checkIfCategoryAlreadyExist(name);
 
         Category category = this.getCategory(id);
         category.setName(name);
-        categoryRepository.save(category);
+        Category saved = categoryRepository.save(category);
+        return mapper.map(saved, CategoryServiceModel.class);
     }
 
     @Override

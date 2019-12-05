@@ -12,7 +12,7 @@ public interface CategoryService {
 
     CategoryServiceModel findById(String id);
 
-    void editCategory(String id, CategoryServiceModel categoryServiceModel);
+    CategoryServiceModel editCategory(String id, CategoryServiceModel categoryServiceModel);
 
     void deleteCategory(String id);
 }

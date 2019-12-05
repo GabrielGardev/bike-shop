@@ -32,7 +32,7 @@ public class BicycleSizeServiceImpl implements BicycleSizeService {
     public void addSize(BicycleSizeServiceModel bicycleSizeServiceModel) {
         this.checkIfSizeAlreadyExist(bicycleSizeServiceModel.getName());
         BicycleSize bicycleSize = mapper.map(bicycleSizeServiceModel, BicycleSize.class);
-        bicycleSizeRepository.saveAndFlush(bicycleSize);
+        bicycleSizeRepository.save(bicycleSize);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BicycleSizeServiceImpl implements BicycleSizeService {
     }
 
     @Override
-    public void deleteBicycleById(String id) {
+    public void deleteBicycleSizeById(String id) {
         BicycleSize bicycleSize = this.getBicycleSize(id);
         bicycleSizeRepository.delete(bicycleSize);
     }

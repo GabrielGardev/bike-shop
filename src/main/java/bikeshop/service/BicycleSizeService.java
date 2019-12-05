@@ -12,5 +12,5 @@ public interface BicycleSizeService {
 
     BicycleSizeServiceModel findById(String id);
 
-    void deleteBicycleById(String id);
+    void deleteBicycleSizeById(String id);
 }
