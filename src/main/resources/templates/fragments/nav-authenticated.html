@@ -57,7 +57,10 @@
             </th:block>
 
             <li class="nav-item active">
-                <a class="nav-link" th:href="@{/logout?login}">Logout</a>
+                <form action="/logout?login" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button class="nav-link bg-transparent border-0">Logout</button>
+                </form>
             </li>
         </ul>
         <!--                end of first line-->
