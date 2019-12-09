@@ -1,14 +1,10 @@
 package bikeshop.service.impl;
 
 import bikeshop.domain.entities.BicycleSize;
-import bikeshop.domain.entities.Category;
 import bikeshop.domain.models.service.BicycleSizeServiceModel;
-import bikeshop.domain.models.service.CategoryServiceModel;
 import bikeshop.error.BicycleSizeAlreadyExistException;
 import bikeshop.error.BicycleSizeNotFoundException;
-import bikeshop.error.CategoryNotFoundException;
 import bikeshop.repository.BicycleSizeRepository;
-import bikeshop.repository.CategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +30,6 @@ public class BicycleSizeServiceTest {
     private BicycleSize entityModel = new BicycleSize();
 
     private static final String VALID_SIZE_NAME = "L";
-    private static final String VALID_SIZE_NEW_NAME = "XL";
     private static final String VALID_ID = "gasgasga";
 
     @InjectMocks
@@ -141,7 +136,7 @@ public class BicycleSizeServiceTest {
     }
 
     @Test
-    public void deleteBicycleById_shouldDeleteCorrectly_whenDateIsValid() {
+    public void deleteBicycleSizeById_shouldDeleteCorrectly_whenDataIsValid() {
         //Arrange
         when(bicycleSizeRepository.findById(VALID_ID))
                 .thenReturn(Optional.of(entityModel));
