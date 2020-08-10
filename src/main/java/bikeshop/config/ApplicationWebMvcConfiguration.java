@@ -22,7 +22,7 @@ public class ApplicationWebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this.titleInterceptor);
+        registry.addInterceptor(titleInterceptor);
         registry.addInterceptor(faviconInterceptor);
     }
 }
